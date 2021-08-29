@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 947c0238482e7c142bca03cc4e753230, type: 3}
+  m_Name: LightMapData
+  m_EditorClassIdentifier: 
+  lightMapUVs:
+    m_Position:
+    - {x: 3.5, y: 0, z: -3.5}
+    - {x: 3.5, y: 0, z: 3.5}
+    - {x: -3.5, y: 0, z: -3.5}
+    - {x: -3.5, y: 0, z: 3.5}
+    m_LightMapUV:
+    - {x: 0.23808943, y: 0.23808943, z: 0.71973747, w: 0.7841906}
+    - {x: 0.23808943, y: 0.23808943, z: 0.47950312, w: 0.7841906}
+    - {x: 0.23808943, y: 0.23808943, z: -0.0009656351, w: 0.7841906}
+    - {x: 0.23808943, y: 0.23808943, z: 0.23926874, w: 0.7841906}

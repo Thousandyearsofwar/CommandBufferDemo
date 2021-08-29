@@ -1,0 +1,579 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8047089455938595983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b621cc0bf39649b89f061a26b0342, type: 3}
+  m_Name: NewCustomRenderPassFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  blitMat: {fileID: 2100000, guid: 96b7453466fb9494b9399eee560d81cb, type: 2}
+  Event: 350
+  m_RenderQueueType: 0
+  m_LayerMask:
+    m_Bits: 8
+  m_LayerMask1:
+    m_Bits: 16
+  PassNames:
+  - m_CustomLightMode
+  override_Material: {fileID: 2100000, guid: 8a3923cda8e499f4e8aecfc17a7fd167, type: 2}
+  overrideMaterialPassIndex: 0
+  overriderDepthState: 1
+  enableWrite: 1
+  depthCompareFunction: 4
+  stencilSettings:
+    overrideStencilState: 0
+    stencilReference: 1
+    stencilCompareFunction: 5
+    passOperation: 0
+    failOperation: 0
+    zFailOperation: 0
+  cameraSettings:
+    overrideCamera: 0
+    restoreCamera: 1
+    offset: {x: 0, y: 0, z: 0, w: 0}
+    cameraFieldOfView: 60
+--- !u!114 &-7453265576823050313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cebedbcac423bcc48b4ec9133129c99e, type: 3}
+  m_Name: SetRenderTargetPassFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  blitMat: {fileID: 0}
+  Event: 300
+  m_RenderQueueType: 0
+  m_LayerMask:
+    m_Bits: 8
+  m_LayerMask1:
+    m_Bits: 16
+  PassNames:
+  - m_CustomLightMode
+  override_Material: {fileID: 2100000, guid: 8a3923cda8e499f4e8aecfc17a7fd167, type: 2}
+  overrideMaterialPassIndex: 0
+  overriderDepthState: 1
+  enableWrite: 1
+  depthCompareFunction: 4
+  stencilSettings:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 0
+    failOperation: 0
+    zFailOperation: 0
+  cameraSettings:
+    overrideCamera: 0
+    restoreCamera: 1
+    offset: {x: 0, y: 0, z: 0, w: 0}
+    cameraFieldOfView: 60
+--- !u!114 &-5372407312567840080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab345b434c4375a4091c46d5a51b4cc0, type: 3}
+  m_Name: AdditionalPostProcessRenderFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  Event: 500
+  postProcessData: {fileID: 11400000, guid: f81b2afd2db0956439747faadaabb2be, type: 2}
+  FXAAMat: {fileID: 2100000, guid: 96b7453466fb9494b9399eee560d81cb, type: 2}
+--- !u!114 &-4820301250892304433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df08d765840a3bc46b131f7c33f9d0d7, type: 3}
+  m_Name: DrawMeshFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  m_DrawMeshPassSetting:
+    m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    passEvent: 250
+    UnlitInstancedMaterial: {fileID: 2100000, guid: 63399c7a251972845a0ab1fd58422119, type: 2}
+    LitInstancedMaterial: {fileID: 2100000, guid: 256ca29ecc31fc143812f8189b958443, type: 2}
+    LitInstancedProceduralMaterial: {fileID: 2100000, guid: 4d777a3d3bbdd384a8c696c7697990b8, type: 2}
+    lightMap: {fileID: 2800000, guid: b9eec03d7fbe9f5419a64f53bf578cfa, type: 3}
+    lightMapData: {fileID: 11400000, guid: bfcb66fea4ad4494aaf91e4f695c5631, type: 2}
+--- !u!114 &-3161459805922407105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: NewRenderObjects
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: NewRenderObjects
+    Event: 300
+    filterSettings:
+      RenderQueueType: 0
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 0
+      PassNames: []
+    overrideMaterial: {fileID: 0}
+    overrideMaterialPassIndex: 0
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
+--- !u!114 &-2477416501317677492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b74a777e00fed47a2a0e40bc88c985, type: 3}
+  m_Name: RenderObjectsFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  Event: 350
+  m_RenderQueueType: 0
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_LayerMask1:
+    serializedVersion: 2
+    m_Bits: 16
+  PassNames:
+  - m_CustomLightMode
+  override_Material: {fileID: 2100000, guid: 8a3923cda8e499f4e8aecfc17a7fd167, type: 2}
+  overrideMaterialPassIndex: 0
+  overriderDepthState: 1
+  enableWrite: 1
+  depthCompareFunction: 4
+  stencilSettings:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 0
+    failOperation: 0
+    zFailOperation: 0
+  cameraSettings:
+    overrideCamera: 0
+    restoreCamera: 1
+    offset: {x: 0, y: 0, z: 0, w: 0}
+    cameraFieldOfView: 60
+--- !u!114 &-2327318057922955512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d817c712172d0034d9931cc3c69c8535, type: 3}
+  m_Name: RenderTextureRequest
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  Event: 350
+--- !u!114 &-1630588925579586666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6005a86523bc2c4b8001b4b9454ebb2, type: 3}
+  m_Name: RenderInstancesIndirectPassFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  GPUComputeShader: {fileID: 7200000, guid: e7e17e831f661994c9d963f1f102bda7, type: 3}
+  GPUProceduralCS: {fileID: 7200000, guid: c1f345a3f7dc062488878ccd9dcc117b, type: 3}
+  InstanceMaterial: {fileID: 2100000, guid: 741234a8ca420144c97bccb3e88119ee, type: 2}
+  ProceduralMaterial: {fileID: 2100000, guid: 4ccc3e8be37598742a4e54d4c5e16349, type: 2}
+  InstanceMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  resolution: 16
+--- !u!114 &-608302845750733304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 997f3aa257ccf264ea2ac2ffd3520d98, type: 3}
+  m_Name: ForceRenderToRenderTexFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  Event: 400
+  material: {fileID: 2100000, guid: 15ad618d146662246a249d9ec463803b, type: 2}
+  _Hue: 0
+  _Saturation: 0
+  _Value: 0
+--- !u!114 &-102090336252006146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab345b434c4375a4091c46d5a51b4cc0, type: 3}
+  m_Name: NewAdditionalPostProcessRenderFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  Event: 500
+  postProcessData: {fileID: 11400000, guid: f81b2afd2db0956439747faadaabb2be, type: 2}
+  FXAAMat: {fileID: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
+  m_Name: CustomForwardRendererData
+  m_EditorClassIdentifier: 
+  m_RendererFeatures:
+  - {fileID: 2186570670579915142}
+  - {fileID: -2327318057922955512}
+  - {fileID: -4820301250892304433}
+  - {fileID: -1630588925579586666}
+  - {fileID: -2477416501317677492}
+  m_RendererFeatureMap: 861934a07042581e087726968eb4b3dfcf6f31268dd91abd969324ec02fc5ee94cce4466d1729edd
+  postProcessData: {fileID: 11400000, guid: 9b61928264c8dd1449a2c2c7aedae759, type: 2}
+  xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
+  shaders:
+    blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
+    copyDepthPS: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
+    screenSpaceShadowPS: {fileID: 4800000, guid: 0f854b35a0cf61a429bd5dcfea30eddd, type: 3}
+    samplingPS: {fileID: 4800000, guid: 04c410c9937594faa893a11dceb85f7e, type: 3}
+    tileDepthInfoPS: {fileID: 0}
+    tileDeferredPS: {fileID: 0}
+    stencilDeferredPS: {fileID: 4800000, guid: e9155b26e1bc55942a41e518703fe304, type: 3}
+    fallbackErrorPS: {fileID: 4800000, guid: e6e9a19c3678ded42a3bc431ebef7dbd, type: 3}
+    materialErrorPS: {fileID: 4800000, guid: 5fd9a8feb75a4b5894c241777f519d4e, type: 3}
+  m_OpaqueLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_TransparentLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_DefaultStencilState:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 2
+    failOperation: 0
+    zFailOperation: 0
+  m_ShadowTransparentReceive: 1
+  m_RenderingMode: 0
+  m_AccurateGbufferNormals: 0
+--- !u!114 &732016900120262577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd492fa27704be46a886faeb3f418d7, type: 3}
+  m_Name: RenderInstancesPassFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  GPUComputeShader: {fileID: 7200000, guid: e7e17e831f661994c9d963f1f102bda7, type: 3}
+  InstanceMaterial: {fileID: 2100000, guid: 741234a8ca420144c97bccb3e88119ee, type: 2}
+  InstanceMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 3}
+  resolution: 10
+--- !u!114 &1365501069192521060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
+  m_Name: NewScreenSpaceAmbientOcclusion
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  m_Shader: {fileID: 4800000, guid: 0849e84e3d62649e8882e9d6f056a017, type: 3}
+  m_Settings:
+    Downsample: 0
+    Source: 1
+    NormalSamples: 1
+    Intensity: 3
+    DirectLightingStrength: 0.25
+    Radius: 0.035
+    SampleCount: 6
+--- !u!114 &1387884600349008002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b621cc0bf39649b89f061a26b0342, type: 3}
+  m_Name: DrawRendererTestFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  blitMat: {fileID: 0}
+  Event: 300
+  m_RenderQueueType: 0
+  m_LayerMask:
+    m_Bits: 8
+  m_LayerMask1:
+    m_Bits: 0
+  PassNames:
+  - m_CustomLightMode
+  override_Material: {fileID: 2100000, guid: 289bc55fa81369740a3aa149fee06205, type: 2}
+  overrideMaterialPassIndex: 0
+  overriderDepthState: 0
+  enableWrite: 0
+  depthCompareFunction: 4
+  stencilSettings:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 0
+    failOperation: 0
+    zFailOperation: 0
+  cameraSettings:
+    overrideCamera: 0
+    restoreCamera: 1
+    offset: {x: 0, y: 0, z: 0, w: 0}
+    cameraFieldOfView: 60
+--- !u!114 &2054321513923772861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab345b434c4375a4091c46d5a51b4cc0, type: 3}
+  m_Name: NewAdditionalPostProcessRenderFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  Event: 500
+  postProcessData: {fileID: 11400000, guid: f81b2afd2db0956439747faadaabb2be, type: 2}
+  FXAAMat: {fileID: 0}
+--- !u!114 &2186570670579915142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 041122c143804bb45b6ca4e741a50754, type: 3}
+  m_Name: DrawAndBlitTest
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  Event: 500
+  material: {fileID: 2100000, guid: 15ad618d146662246a249d9ec463803b, type: 2}
+  _Hue: 0
+  _Saturation: 0
+  _Value: 0
+--- !u!114 &2873323281005769399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cebedbcac423bcc48b4ec9133129c99e, type: 3}
+  m_Name: DrawMeshAndSetRenderTargetPassFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  blitMat: {fileID: 0}
+  Event: 350
+  m_RenderQueueType: 0
+  m_LayerMask:
+    m_Bits: 8
+  m_LayerMask1:
+    m_Bits: 16
+  PassNames:
+  - m_CustomLightMode
+  override_Material: {fileID: 2100000, guid: 8a3923cda8e499f4e8aecfc17a7fd167, type: 2}
+  overrideMaterialPassIndex: 0
+  overriderDepthState: 1
+  enableWrite: 1
+  depthCompareFunction: 4
+  stencilSettings:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 0
+    failOperation: 0
+    zFailOperation: 0
+  cameraSettings:
+    overrideCamera: 0
+    restoreCamera: 1
+    offset: {x: 0, y: 0, z: 0, w: 0}
+    cameraFieldOfView: 60
+--- !u!114 &5078066069118915263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 997f3aa257ccf264ea2ac2ffd3520d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  Event: 500
+  material: {fileID: 2100000, guid: 15ad618d146662246a249d9ec463803b, type: 2}
+  _Hue: 0
+  _Saturation: 0
+  _Value: 0
+--- !u!114 &7172693864387359474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b621cc0bf39649b89f061a26b0342, type: 3}
+  m_Name: SetRenderTargetTest
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  blitMat: {fileID: 0}
+  Event: 350
+  m_RenderQueueType: 0
+  m_LayerMask:
+    m_Bits: 8
+  m_LayerMask1:
+    m_Bits: 16
+  PassNames:
+  - m_CustomLightMode
+  override_Material: {fileID: 2100000, guid: 8a3923cda8e499f4e8aecfc17a7fd167, type: 2}
+  overrideMaterialPassIndex: 0
+  overriderDepthState: 1
+  enableWrite: 1
+  depthCompareFunction: 4
+  stencilSettings:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 0
+    failOperation: 0
+    zFailOperation: 0
+  cameraSettings:
+    overrideCamera: 0
+    restoreCamera: 1
+    offset: {x: 0, y: 0, z: 0, w: 0}
+    cameraFieldOfView: 60
+--- !u!114 &7459530534870067555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
+  m_Name: NewScreenSpaceAmbientOcclusion
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  m_Shader: {fileID: 4800000, guid: 0849e84e3d62649e8882e9d6f056a017, type: 3}
+  m_Settings:
+    Downsample: 0
+    Source: 1
+    NormalSamples: 1
+    Intensity: 10
+    DirectLightingStrength: 0.25
+    Radius: 0.035
+    SampleCount: 6
+--- !u!114 &9032243299696819997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b621cc0bf39649b89f061a26b0342, type: 3}
+  m_Name: mRenderObject
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  blitMat: {fileID: 0}
+  Event: 350
+  m_RenderQueueType: 0
+  m_LayerMask:
+    m_Bits: 8
+  m_LayerMask1:
+    m_Bits: 16
+  PassNames:
+  - m_CustomLightMode
+  override_Material: {fileID: 2100000, guid: 8a3923cda8e499f4e8aecfc17a7fd167, type: 2}
+  overrideMaterialPassIndex: 0
+  overriderDepthState: 1
+  enableWrite: 1
+  depthCompareFunction: 4
+  stencilSettings:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 0
+    failOperation: 0
+    zFailOperation: 0
+  cameraSettings:
+    overrideCamera: 0
+    restoreCamera: 1
+    offset: {x: 0, y: 0, z: 0, w: 0}
+    cameraFieldOfView: 60
