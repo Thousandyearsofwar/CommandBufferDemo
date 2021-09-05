@@ -89,7 +89,7 @@ Shader "Universal Render Pipeline/Lit_RenderStateBlockTest"
 
             Blend[_SrcBlend][_DstBlend]
             ZWrite[_ZWrite]
-            ZTest Always
+            //ZTest Always
             Cull[_Cull]
             // Stencil
             // {

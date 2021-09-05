@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: RenderObjectsFeature
   m_EditorClassIdentifier: 
   m_Active: 1
-  Event: 350
+  Event: 300
   m_RenderQueueType: 0
   m_LayerMask:
     serializedVersion: 2
@@ -177,7 +177,7 @@ MonoBehaviour:
     m_Bits: 16
   PassNames:
   - m_CustomLightMode
-  override_Material: {fileID: 2100000, guid: 8a3923cda8e499f4e8aecfc17a7fd167, type: 2}
+  override_Material: {fileID: 2100000, guid: f29bfcc2381b8cc42913480e05695714, type: 2}
   overrideMaterialPassIndex: 0
   overriderDepthState: 1
   enableWrite: 1

@@ -41,9 +41,11 @@ class DrawRenderersPass : ScriptableRenderPass
     RenderStateBlock m_RenderStateBlock;
     NativeArray<RenderStateBlock> m_RenderStateBlocks;
 
-    public DrawRenderersPass(string profilerTag, RenderPassEvent renderPassEvent, string[] shaderTags, RenderQueueType renderQueueType, int layerMask, CustomCameraSettings cameraSettings,
+    public DrawRenderersPass(string profilerTag, RenderPassEvent renderPassEvent, RenderQueueType renderQueueType, int layerMask, string[] shaderTags,
+    Material overrideMaterial, int overrideMaterialPassIndex,
     bool overrideDepthState, bool enableWrite, CompareFunction depthCompareFunction,
-    StencilStateData stencilSettings)
+    StencilStateData stencilSettings,
+    CustomCameraSettings cameraSettings)
     {
         this.m_ProfilingSampler = new ProfilingSampler(profilerTag);
         this.m_ProfilerTag = profilerTag;
@@ -51,12 +53,7 @@ class DrawRenderersPass : ScriptableRenderPass
         this.renderPassEvent = renderPassEvent;
         this.m_RenderQueueType = renderQueueType;
 
-        this.overrideMaterial = null;
-        this.overrideMaterialPassIndex = 0;
-
-        RenderQueueRange renderQueueRange = (renderQueueType == RenderQueueType.Transparent) ? RenderQueueRange.transparent : RenderQueueRange.opaque;
-        //@@@Filtering Setting
-        this.m_FilteringSetting = new FilteringSettings(renderQueueRange, layerMask);
+        //shaderTags数组转成 List<ShaderTagId> 
         if (shaderTags != null && shaderTags.Length > 0)
         {
             foreach (var passName in shaderTags)
@@ -68,8 +65,16 @@ class DrawRenderersPass : ScriptableRenderPass
         {
             m_ShaderTagIdList.Add(new ShaderTagId("SRPDefaultUnlit"));
         }
-        m_RenderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
-        m_CameraSettings = cameraSettings;
+
+        RenderQueueRange renderQueueRange = (renderQueueType == RenderQueueType.Transparent) ? RenderQueueRange.transparent : RenderQueueRange.opaque;
+        //@@@Filtering Setting  
+        //1.renderQueueRange渲染队列：不透明队列还是透明队列过滤  
+        //2.layerMask Layer层级过滤
+        this.m_FilteringSetting = new FilteringSettings(renderQueueRange, layerMask);
+
+        this.overrideMaterial = overrideMaterial;
+        this.overrideMaterialPassIndex = overrideMaterialPassIndex;
+
 
         //@@@RenderBlockState:Depth
         this.overrideDepthState = overrideDepthState;
@@ -79,6 +84,9 @@ class DrawRenderersPass : ScriptableRenderPass
         //@@@RenderBlockState:Stencil
         this.stencilSettings = stencilSettings;
 
+        m_CameraSettings = cameraSettings;
+
+        m_RenderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
     }
 
     public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
@@ -94,22 +102,24 @@ class DrawRenderersPass : ScriptableRenderPass
     //Test0:CullingResults+DrawingSettings+FilteringSettings
     public void Test0(ScriptableRenderContext context, ref RenderingData renderingData)
     {
-        SortingCriteria sortingCriteria = (m_RenderQueueType == RenderQueueType.Transparent) ?
-        SortingCriteria.CommonTransparent :
-        renderingData.cameraData.defaultOpaqueSortFlags;
 
-        //m_DrawingSetting = CreateDrawingSettings(m_ShaderTagIdList, ref renderingData, sortingCriteria);
         Camera camera = renderingData.cameraData.camera;
         ref CameraData cameraData = ref renderingData.cameraData;
         Rect pixelRect = camera.pixelRect;
         float cameraAspect = (float)pixelRect.width / (float)pixelRect.height;
 
-        //@@@Drawing setting
+        //@@@Drawing setting 渲染排序顺序
+        SortingCriteria sortingCriteria = (m_RenderQueueType == RenderQueueType.Transparent) ?
+        SortingCriteria.CommonTransparent :
+        renderingData.cameraData.defaultOpaqueSortFlags;
         SortingSettings sortingSettings = new SortingSettings(camera)
         {
             criteria = sortingCriteria
         };
 
+        //
+        //等价于
+        //m_DrawingSetting = CreateDrawingSettings(m_ShaderTagIdList, ref renderingData, sortingCriteria);
         m_DrawingSetting = new DrawingSettings(m_ShaderTagIdList[0], sortingSettings)
         {
             perObjectData = renderingData.perObjectData,
@@ -118,11 +128,11 @@ class DrawRenderersPass : ScriptableRenderPass
 
             enableInstancing = camera.cameraType == CameraType.Preview ? false : true,
         };
-        for (int i = 0; i < m_ShaderTagIdList.Count; ++i)
+        for (int i = 1; i < m_ShaderTagIdList.Count; ++i)
         {
             m_DrawingSetting.SetShaderPassName(i, m_ShaderTagIdList[i]);
         }
-
+        //Debug.Log(((string)m_DrawingSetting.GetShaderPassName(0)));
         m_DrawingSetting.overrideMaterial = overrideMaterial;
         m_DrawingSetting.overrideMaterialPassIndex = overrideMaterialPassIndex;
 
@@ -327,7 +337,7 @@ renderingData.cameraData.defaultOpaqueSortFlags;
         renderTypes[1] = fallBack;
         //测试内容:
         //更改Shader中的RenderType，改为"Opaque0",再改回去，说明renderType=Opaque时,使用m_RenderStateBlock
-
+        //所以我们可以根据RenderType去批量指定RenderStateBlock
 
         CommandBuffer commandBuffer = CommandBufferPool.Get();
         using (new ProfilingScope(commandBuffer, m_ProfilingSampler))

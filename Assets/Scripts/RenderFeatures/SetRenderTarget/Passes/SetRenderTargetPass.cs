@@ -54,9 +54,11 @@ class SetRenderTargetPass : ScriptableRenderPass
     RenderBufferLoadAction[] m_ColorLoadAction = new RenderBufferLoadAction[3];
     RenderBufferStoreAction[] m_ColorStoreAction = new RenderBufferStoreAction[3];
 
-    public SetRenderTargetPass(string profilerTag, RenderPassEvent renderPassEvent, string[] shaderTags, RenderQueueType renderQueueType, int layerMask, int LayerMask1, CustomCameraSettings cameraSettings,
+    public SetRenderTargetPass(string profilerTag, RenderPassEvent renderPassEvent, RenderQueueType renderQueueType, int layerMask, int LayerMask1, string[] shaderTags,
+    Material overrideMaterial, int overrideMaterialPassIndex,
     bool overrideDepthState, bool enableWrite, CompareFunction depthCompareFunction,
-    StencilStateData stencilSettings)
+    StencilStateData stencilSettings,
+    CustomCameraSettings cameraSettings)
     {
         this.m_ProfilingSampler = new ProfilingSampler(profilerTag);
         this.m_ProfilerTag = profilerTag;
@@ -64,8 +66,8 @@ class SetRenderTargetPass : ScriptableRenderPass
         this.renderPassEvent = renderPassEvent;
         this.m_RenderQueueType = renderQueueType;
 
-        this.overrideMaterial = null;
-        this.overrideMaterialPassIndex = 0;
+        this.overrideMaterial = overrideMaterial;
+        this.overrideMaterialPassIndex = overrideMaterialPassIndex;
 
         RenderQueueRange renderQueueRange = (renderQueueType == RenderQueueType.Transparent) ? RenderQueueRange.transparent : RenderQueueRange.opaque;
         //@@@Filtering Setting
@@ -159,6 +161,9 @@ class SetRenderTargetPass : ScriptableRenderPass
         cmd.GetTemporaryRT(renderTextureID, renderingData.cameraData.cameraTargetDescriptor.width, renderingData.cameraData.cameraTargetDescriptor.height, 8,
         FilterMode.Bilinear, UnityEngine.Experimental.Rendering.GraphicsFormat.A2B10G10R10_UNormPack32, 1, false, RenderTextureMemoryless.Depth, false);
         ConfigureTarget(renderTextureID, renderTextureID);
+        ConfigureInput(ScriptableRenderPassInput.Depth);
+        //看情况调用DepthOnly Pass,Opaque之后调用Pass直接Copy，如果在这之前调用DepthOnly pass
+        ConfigureInput(ScriptableRenderPassInput.Normal);
     }
 
     void Test5_6_Setup(CommandBuffer cmd, ref RenderingData renderingData)

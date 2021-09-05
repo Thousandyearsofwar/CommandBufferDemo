@@ -58,28 +58,24 @@ public class RenderObjectsFeature : ScriptableRendererFeature
     public override void Create()
     {
         //如果需要当前CameraColor的Id需要把Renderer传进去
-        m_SetRenderTargetPass = new SetRenderTargetPass(this.name, Event, PassNames, m_RenderQueueType, m_LayerMask, m_LayerMask1, cameraSettings,
+        m_SetRenderTargetPass = new SetRenderTargetPass(this.name, Event, m_RenderQueueType, m_LayerMask, m_LayerMask1, PassNames,
+        override_Material, overrideMaterialPassIndex,
         overriderDepthState, enableWrite, depthCompareFunction,
-        this.stencilSettings);
-        // Configures where the render pass should be injected.
-        m_SetRenderTargetPass.renderPassEvent = Event;
-        m_SetRenderTargetPass.overrideMaterial = override_Material;
-        m_SetRenderTargetPass.overrideMaterialPassIndex = overrideMaterialPassIndex;
+        this.stencilSettings,
+        cameraSettings);
 
-        //如果需要当前CameraColor的Id需要把Renderer传进去
-        m_DrawRendererPass = new DrawRenderersPass(this.name, Event, PassNames, m_RenderQueueType, m_LayerMask, cameraSettings,
+        //如果需要当前CameraColor的Id需要把Renderer传进去 Override material使用Lit_RenderStateBlockTest测试[直接搬的URP的Lit]
+        m_DrawRendererPass = new DrawRenderersPass(this.name, Event, m_RenderQueueType, m_LayerMask, PassNames,
+        override_Material, overrideMaterialPassIndex,
         overriderDepthState, enableWrite, depthCompareFunction,
-        this.stencilSettings);
-        // Configures where the render pass should be injected.
-        m_DrawRendererPass.renderPassEvent = Event;
-        m_DrawRendererPass.overrideMaterial = override_Material;
-        m_DrawRendererPass.overrideMaterialPassIndex = overrideMaterialPassIndex;
+        this.stencilSettings,
+        cameraSettings);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        renderer.EnqueuePass(m_SetRenderTargetPass);
-        //renderer.EnqueuePass(m_DrawRendererPass);
+        //renderer.EnqueuePass(m_SetRenderTargetPass);
+        renderer.EnqueuePass(m_DrawRendererPass);
     }
 }
 

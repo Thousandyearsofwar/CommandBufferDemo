@@ -25,7 +25,7 @@ Shader "Unlit/UnlitTest _LightModeTest"
         // TEXTURE2D(_MainTex);	SAMPLER(sampler_MainTex);
 
         struct Attributes
-        {
+        { 
             float4 positionOS : POSITION;
             UNITY_VERTEX_INPUT_INSTANCE_ID
         };
