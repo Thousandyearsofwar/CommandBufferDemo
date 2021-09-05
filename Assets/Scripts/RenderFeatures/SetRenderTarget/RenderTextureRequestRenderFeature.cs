@@ -10,7 +10,7 @@ public class RenderTextureRequestRenderFeature : ScriptableRendererFeature
     /// <inheritdoc/>
     public override void Create()
     {
-        m_ScriptablePass = new RenderTextureRequestPass();
+        m_ScriptablePass = new RenderTextureRequestPass(this.name);
 
         // Configures where the render pass should be injected.
         m_ScriptablePass.renderPassEvent = Event;

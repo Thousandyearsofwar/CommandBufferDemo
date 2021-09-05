@@ -23,12 +23,22 @@ using UnityEngine.Rendering.Universal;
 
 class RenderTextureRequestPass : ScriptableRenderPass
 {
+    //Profile use sampler
+    ProfilingSampler m_ProfilingSampler;
+    string m_ProfilerTag;
+
     private RenderTexture renderTexture;
     private static int renderTextureID;
     private RenderTargetHandle renderTargetHandle;
 
     private RenderTargetIdentifier renderTargetIdentifier;
 
+
+    public RenderTextureRequestPass(string profilerTag)
+    {
+        this.m_ProfilingSampler = new ProfilingSampler(profilerTag);
+        this.m_ProfilerTag = profilerTag;
+    }
     public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
     {
         renderTexture = new RenderTexture(renderingData.cameraData.cameraTargetDescriptor);
@@ -43,8 +53,10 @@ class RenderTextureRequestPass : ScriptableRenderPass
         //RTRequestTest0_2(commandBuffer, context, ref renderingData);
 
         //Do something at here...
-        commandBuffer.ClearRenderTarget(true, true, Color.blue, 1);
-
+        using (new ProfilingScope(commandBuffer, m_ProfilingSampler))
+        {
+            commandBuffer.ClearRenderTarget(true, true, Color.blue, 1);
+        }
         context.ExecuteCommandBuffer(commandBuffer);
         commandBuffer.Clear();
         CommandBufferPool.Release(commandBuffer);

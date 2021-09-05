@@ -438,14 +438,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 934127051}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c61b5348aae44864cae147cc1ba96130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   renderTexture: {fileID: 8400000, guid: 22abfd89c7ad598448bdda3b8b227420, type: 2}
-  m_Material: {fileID: 2100000, guid: 70ab1480258c9804c85511c14422a3e0, type: 2}
-  m_CameraEvent: 0
+  m_Material: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_CameraEvent: 14
 --- !u!65 &934127053
 BoxCollider:
   m_ObjectHideFlags: 0

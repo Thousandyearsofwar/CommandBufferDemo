@@ -96,7 +96,7 @@ class DrawRenderersPass : ScriptableRenderPass
     // Here you can implement the rendering logic.
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
     {
-        Test0(context, ref renderingData);
+        Test3(context, ref renderingData);
     }
 
     //Test0:CullingResults+DrawingSettings+FilteringSettings
@@ -264,7 +264,7 @@ renderingData.cameraData.defaultOpaqueSortFlags;
         CommandBufferPool.Release(commandBuffer);
     }
 
-    //Test2:RenderType Match Subshader
+    //Test2: Match Subshader RenderType Tags
     public void Test2(ScriptableRenderContext context, ref RenderingData renderingData)
     {
         SortingCriteria sortingCriteria = (m_RenderQueueType == RenderQueueType.Transparent) ?
@@ -375,7 +375,7 @@ renderingData.cameraData.defaultOpaqueSortFlags;
         renderTypes.Dispose();
     }
 
-    //Test3:TagName+TagVlaues Match Subshader or Pass
+    //Test3: Match Subshader or Pass’s TagName+TagVlaues 
     public void Test3(ScriptableRenderContext context, ref RenderingData renderingData)
     {
         SortingCriteria sortingCriteria = (m_RenderQueueType == RenderQueueType.Transparent) ?

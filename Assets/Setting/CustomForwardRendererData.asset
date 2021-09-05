@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b74a777e00fed47a2a0e40bc88c985, type: 3}
   m_Name: RenderObjectsFeature
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   Event: 300
   m_RenderQueueType: 0
   m_LayerMask:
@@ -190,7 +190,7 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   cameraSettings:
-    overrideCamera: 0
+    overrideCamera: 1
     restoreCamera: 1
     offset: {x: 0, y: 0, z: 0, w: 0}
     cameraFieldOfView: 60
@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d817c712172d0034d9931cc3c69c8535, type: 3}
   m_Name: RenderTextureRequest
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   Event: 350
 --- !u!114 &-1630588925579586666
 MonoBehaviour:
