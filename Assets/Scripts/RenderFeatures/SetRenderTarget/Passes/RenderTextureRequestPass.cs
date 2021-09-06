@@ -12,8 +12,7 @@ using UnityEngine.Rendering.Universal;
 //RenderTargetHandle:https://zhuanlan.zhihu.com/p/215718642
 // URP对RenderTargetIdentifier的一个封装
 // 保存shader变量的id，提升性能，避免多次hash计算
-// 真正用rt的时候，才会创建RenderTargetIdentifier
-// 定义了一个静态CameraTarget
+
 
 //所以在GetTemporaryRT时只能够用int
 //SetRenderTarget 就可以用int//RenderTexture [which has implicit conversion operators to save on typing.]隐式转换到RenderTargetIdentifier
@@ -41,8 +40,6 @@ class RenderTextureRequestPass : ScriptableRenderPass
     }
     public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
     {
-        renderTexture = new RenderTexture(renderingData.cameraData.cameraTargetDescriptor);
-
         RTRequestTest0_0(cmd, ref renderingData);
     }
 
@@ -50,7 +47,7 @@ class RenderTextureRequestPass : ScriptableRenderPass
     {
         CommandBuffer commandBuffer = CommandBufferPool.Get();
 
-        //RTRequestTest0_2(commandBuffer, context, ref renderingData);
+        //RTRequestTest0_4(commandBuffer, context, ref renderingData);
 
         //Do something at here...
         using (new ProfilingScope(commandBuffer, m_ProfilingSampler))
@@ -65,13 +62,33 @@ class RenderTextureRequestPass : ScriptableRenderPass
     void RTRequestTest0_0(CommandBuffer commandBuffer, ref RenderingData renderingData)
     {
         RenderTextureDescriptor cameraDescriptor = renderingData.cameraData.cameraTargetDescriptor;
+        if (renderTexture == null)
+        {
+            renderTexture = new RenderTexture(cameraDescriptor);
+            renderTexture.name = "RequestRT";
+        }
+        ConfigureTarget(renderTexture);
+    }
+
+    void RTRequestTest0_1(CommandBuffer commandBuffer, ref RenderingData renderingData)
+    {
+        RenderTextureDescriptor cameraDescriptor = renderingData.cameraData.cameraTargetDescriptor;
+        renderTexture = RenderTexture.GetTemporary(cameraDescriptor);
+        renderTexture.name = "RequestRT";
+        ConfigureTarget(renderTexture);
+    }
+
+    void RTRequestTest0_2(CommandBuffer commandBuffer, ref RenderingData renderingData)
+    {
+        RenderTextureDescriptor cameraDescriptor = renderingData.cameraData.cameraTargetDescriptor;
         renderTextureID = Shader.PropertyToID("Request_ID");
         commandBuffer.GetTemporaryRT(renderTextureID, cameraDescriptor, FilterMode.Bilinear);
 
         ConfigureTarget(renderTextureID);
     }
 
-    void RTRequestTest0_1(CommandBuffer commandBuffer, ref RenderingData renderingData)
+    //使用URP的renderTargetHandle获取PropertyToID
+    void RTRequestTest0_3(CommandBuffer commandBuffer, ref RenderingData renderingData)
     {
         RenderTextureDescriptor cameraDescriptor = renderingData.cameraData.cameraTargetDescriptor;
 
@@ -83,7 +100,7 @@ class RenderTextureRequestPass : ScriptableRenderPass
     }
 
     //错误对比用放置于Excute中
-    void RTRequestTest0_2(CommandBuffer commandBuffer, ScriptableRenderContext context, ref RenderingData renderingData)
+    void RTRequestTest0_4(CommandBuffer commandBuffer, ScriptableRenderContext context, ref RenderingData renderingData)
     {
         RenderTextureDescriptor cameraDescriptor = renderingData.cameraData.cameraTargetDescriptor;
 
@@ -101,8 +118,9 @@ class RenderTextureRequestPass : ScriptableRenderPass
 
     public override void OnCameraCleanup(CommandBuffer cmd)
     {
-        //@@@记得销毁Pass中创建RenderTexture,不然会内存泄露
-        UnityEngine.Object.DestroyImmediate(renderTexture);
+        //@@@记得释放Pass中创建RenderTexture,不然会内存泄露
+        //UnityEngine.Object.DestroyImmediate(renderTexture);//没有判空处理才用
+        //RenderTexture.ReleaseTemporary(renderTexture);
         cmd.ReleaseTemporaryRT(renderTextureID);
         cmd.ReleaseTemporaryRT(renderTargetHandle.id);
     }

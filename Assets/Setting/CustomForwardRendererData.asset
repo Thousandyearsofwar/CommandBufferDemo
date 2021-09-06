@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d817c712172d0034d9931cc3c69c8535, type: 3}
   m_Name: RenderTextureRequest
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   Event: 350
 --- !u!114 &-1630588925579586666
 MonoBehaviour:

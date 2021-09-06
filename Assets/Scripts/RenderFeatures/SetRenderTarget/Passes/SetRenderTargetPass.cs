@@ -156,6 +156,7 @@ class SetRenderTargetPass : ScriptableRenderPass
         }
     }
 
+
     void Test4_Setup(CommandBuffer cmd, ref RenderingData renderingData)
     {
         cmd.GetTemporaryRT(renderTextureID, renderingData.cameraData.cameraTargetDescriptor.width, renderingData.cameraData.cameraTargetDescriptor.height, 8,
@@ -198,6 +199,9 @@ class SetRenderTargetPass : ScriptableRenderPass
 
     public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
     {
+        //Request Render Texture
+
+
         //Test4
         Test4_Setup(cmd, ref renderingData);
 

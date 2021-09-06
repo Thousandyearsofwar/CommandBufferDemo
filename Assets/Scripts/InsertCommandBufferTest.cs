@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-
+[ExecuteAlways]
 public class InsertCommandBufferTest : MonoBehaviour
 {
     public RenderTexture renderTexture;
     public Material m_Material;
     public CameraEvent m_CameraEvent;
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +36,6 @@ public class InsertCommandBufferTest : MonoBehaviour
                 commandBuffer.SetRenderTarget(renderTexture);
                 commandBuffer.ClearRenderTarget(true, true, Color.black);
                 commandBuffer.DrawRenderer(renderer, m_Material, 0, 0);
-
                 Camera.main.AddCommandBuffer(m_CameraEvent, commandBuffer);
 
                 commandBuffer.Release();
