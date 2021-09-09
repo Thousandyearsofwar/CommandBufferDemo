@@ -101,7 +101,7 @@ class SetRenderTargetPass : ScriptableRenderPass
 
     public void Request_RenderTexture()
     {
-
+        //补充说明：New RenderTexture能够控制的变量很多，tempRenderTexture的方式Mip目前没有办法控制
         mipTexture = new RenderTexture(1024, 1024, 16, UnityEngine.RenderTextureFormat.DefaultHDR, 8);
         mipTexture.name = "RequestRT";
         mipTexture.useMipMap = true;
@@ -114,8 +114,6 @@ class SetRenderTargetPass : ScriptableRenderPass
             mipTextures[0].useMipMap = true;
             mipTextures[0].autoGenerateMips = false;
             mipTextures[0].antiAliasing = 1;
-            //mipTextures[0].memorylessMode = RenderTextureMemoryless.MSAA;
-            //mipTextures[0].bindTextureMS = true;
             for (int i = 1; i < mipTextures.Length; ++i)
             {
                 mipTextures[i] = new RenderTexture(1024, 1024, 0, UnityEngine.RenderTextureFormat.ARGB2101010, 3);
@@ -123,8 +121,6 @@ class SetRenderTargetPass : ScriptableRenderPass
                 mipTextures[i].useMipMap = true;
                 mipTextures[i].autoGenerateMips = false;
                 mipTextures[i].antiAliasing = 1;
-                //mipTextures[i].memorylessMode = RenderTextureMemoryless.MSAA;
-                //mipTextures[i].bindTextureMS = true;
             }
         }
 
@@ -156,7 +152,6 @@ class SetRenderTargetPass : ScriptableRenderPass
         }
     }
 
-
     void Test4_Setup(CommandBuffer cmd, ref RenderingData renderingData)
     {
         cmd.GetTemporaryRT(renderTextureID, renderingData.cameraData.cameraTargetDescriptor.width, renderingData.cameraData.cameraTargetDescriptor.height, 8,
@@ -164,7 +159,7 @@ class SetRenderTargetPass : ScriptableRenderPass
         ConfigureTarget(renderTextureID, renderTextureID);
         ConfigureInput(ScriptableRenderPassInput.Depth);
         //看情况调用DepthOnly Pass,Opaque之后调用Pass直接Copy，如果在这之前调用DepthOnly pass
-        ConfigureInput(ScriptableRenderPassInput.Normal);
+        //ConfigureInput(ScriptableRenderPassInput.Normal);
     }
 
     void Test5_6_Setup(CommandBuffer cmd, ref RenderingData renderingData)
@@ -299,11 +294,13 @@ class SetRenderTargetPass : ScriptableRenderPass
                 RenderingUtils.SetViewAndProjectionMatrices(commandBuffer, viewMat, projectionMat, false);
             }
             RenderTargetIdentifier renderTargetIdentifier = new RenderTargetIdentifier(mipTexture, 1, CubemapFace.Unknown, 0);
+            //渲染目标使用mipTexture的Mip=1级别
             commandBuffer.SetRenderTarget(renderTargetIdentifier);
             context.ExecuteCommandBuffer(commandBuffer);
             commandBuffer.Clear();
             context.DrawRenderers(renderingData.cullResults, ref m_DrawingSetting, ref m_FilteringSetting, ref m_RenderStateBlock);
 
+            //渲染目标override使用mipTexture的Mip=2级别
             commandBuffer.SetRenderTarget(renderTargetIdentifier, 2, CubemapFace.Unknown);
             context.ExecuteCommandBuffer(commandBuffer);
             commandBuffer.Clear();

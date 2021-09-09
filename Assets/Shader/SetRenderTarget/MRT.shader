@@ -1,8 +1,6 @@
 Shader "Unlit/MRT"
 {
-    Properties
-    {
-    }
+    Properties { }
     SubShader
     {
         Tags { "RenderPipeline" = "UniversalRenderPipeline" }
@@ -13,7 +11,10 @@ Shader "Unlit/MRT"
         CBUFFER_START(UnityPerMaterial)
 
         CBUFFER_END
-
+        TEXTURE2D_X_FLOAT(_CameraDepthAttachment);
+        SAMPLER(sampler_CameraDepthAttachment);
+        TEXTURE2D_X_FLOAT(_CameraDepthTexture);
+        SAMPLER(sampler_CameraDepthTexture);
 
         struct Attributes
         {
@@ -59,9 +60,10 @@ Shader "Unlit/MRT"
             {
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
-                 
+                
                 FragmentOutput m_FragmentOutput;
-                m_FragmentOutput.GBuffer0 = float4(1, 0, 0, 1);
+                //m_FragmentOutput.GBuffer0 = float4(1, 0, 0, 1) * SAMPLE_TEXTURE2D(_CameraDepthAttachment, sampler_CameraDepthAttachment, float2(0.5, 0.5)).r;
+                m_FragmentOutput.GBuffer0 = float4(1, 0, 0, 1) * SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, float2(0.5, 0.5)).r;
                 m_FragmentOutput.GBuffer1 = float4(0, 1, 0, 1);
                 m_FragmentOutput.GBuffer2 = float4(0, 0, 1, 1);
                 m_FragmentOutput.GBuffer3 = float4(1, 0, 0, 1);

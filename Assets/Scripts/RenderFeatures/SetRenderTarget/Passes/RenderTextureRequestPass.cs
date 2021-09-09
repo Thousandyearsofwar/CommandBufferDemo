@@ -40,7 +40,7 @@ class RenderTextureRequestPass : ScriptableRenderPass
     }
     public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
     {
-        RTRequestTest0_0(cmd, ref renderingData);
+        RTRequestTest0_1(cmd, ref renderingData);
     }
 
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -67,6 +67,7 @@ class RenderTextureRequestPass : ScriptableRenderPass
             renderTexture = new RenderTexture(cameraDescriptor);
             renderTexture.name = "RequestRT";
         }
+        //配置RenderTarget[渲染目标]
         ConfigureTarget(renderTexture);
     }
 
@@ -120,7 +121,7 @@ class RenderTextureRequestPass : ScriptableRenderPass
     {
         //@@@记得释放Pass中创建RenderTexture,不然会内存泄露
         //UnityEngine.Object.DestroyImmediate(renderTexture);//没有判空处理才用
-        //RenderTexture.ReleaseTemporary(renderTexture);
+        RenderTexture.ReleaseTemporary(renderTexture);
         cmd.ReleaseTemporaryRT(renderTextureID);
         cmd.ReleaseTemporaryRT(renderTargetHandle.id);
     }

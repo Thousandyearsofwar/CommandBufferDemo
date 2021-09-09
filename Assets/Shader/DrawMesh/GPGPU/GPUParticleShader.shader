@@ -15,13 +15,14 @@ Shader "Unlit/GPUParticleShader"
         struct Attributes
         {
             float4 positionOS : POSITION;
-            uint instanceID : SV_InstanceID;
+            UNITY_VERTEX_INPUT_INSTANCE_ID
         };
 
         struct Varyings
         {
             float4 positionCS : SV_POSITION;
             float3 positionWS : TEXCOORD0;
+            UNITY_VERTEX_INPUT_INSTANCE_ID
         };
         ENDHLSL
 
@@ -39,10 +40,12 @@ Shader "Unlit/GPUParticleShader"
             
             void ConfigureProcedural(Attributes input)
             {
-                float3 position = _Positions[input.instanceID];
-                unity_ObjectToWorld = 0.0;
-                unity_ObjectToWorld._m03_m13_m23_m33 = float4(position * 5, 1.0);
-                unity_ObjectToWorld._m00_m11_m22 = _Step * 5;
+                #if defined(INSTANCING_ON)
+                    float3 position = _Positions[input.instanceID];
+                    unity_ObjectToWorld = 0.0;
+                    unity_ObjectToWorld._m03_m13_m23_m33 = float4(position * 5, 1.0);
+                    unity_ObjectToWorld._m00_m11_m22 = _Step * 5;
+                #endif
             }
 
             Varyings LitPassVertex(Attributes input)

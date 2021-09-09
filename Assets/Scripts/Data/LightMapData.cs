@@ -6,10 +6,11 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 #endif
-#if UNITY_EDITOR
+
 [Serializable]
 public class LightMapData : ScriptableObject
 {
+#if UNITY_EDITOR
     [MenuItem("Tools/CreateLightMapData")]
     static void CreateLightMapData()
     {
@@ -29,7 +30,7 @@ public class LightMapData : ScriptableObject
             Selection.activeObject = instance;
         }
     }
-
+#endif
     [Serializable]
     public sealed class PositionAndLightMapUVs
     {
@@ -39,4 +40,3 @@ public class LightMapData : ScriptableObject
     public PositionAndLightMapUVs lightMapUVs;
 
 }
-#endif
