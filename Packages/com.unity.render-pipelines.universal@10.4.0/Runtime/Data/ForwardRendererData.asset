@@ -1,5 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1508013176692401841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df08d765840a3bc46b131f7c33f9d0d7, type: 3}
+  m_Name: NewDrawMeshFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  m_DrawMeshPassSetting:
+    m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    passEvent: 250
+    UnlitInstancedMaterial: {fileID: 2100000, guid: 63399c7a251972845a0ab1fd58422119, type: 2}
+    LitInstancedMaterial: {fileID: 2100000, guid: 256ca29ecc31fc143812f8189b958443, type: 2}
+    LitInstancedProceduralMaterial: {fileID: 2100000, guid: 4d777a3d3bbdd384a8c696c7697990b8, type: 2}
+    lightMap: {fileID: 2800000, guid: b9eec03d7fbe9f5419a64f53bf578cfa, type: 3}
+    lightMapData: {fileID: 11400000, guid: bfcb66fea4ad4494aaf91e4f695c5631, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12,8 +33,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
   m_Name: ForwardRendererData
   m_EditorClassIdentifier: 
-  m_RendererFeatures: []
-  m_RendererFeatureMap: 
+  m_RendererFeatures:
+  - {fileID: -1508013176692401841}
+  m_RendererFeatureMap: 4f19a46e017612eb
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:

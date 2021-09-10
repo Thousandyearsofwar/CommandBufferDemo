@@ -83,7 +83,7 @@ class DrawMeshPass : ScriptableRenderPass
     }
 
     public void DrawLitMeshInstanced_Setup()
-    { 
+    {
         int Count = passSetting.lightMapData.lightMapUVs.m_Position.Count;
         positions = new Vector4[Count];
         for (int i = 0; i < Count; i++)
@@ -96,8 +96,6 @@ class DrawMeshPass : ScriptableRenderPass
         lightProbesSH = new SphericalHarmonicsL2[Count];
         lightProbeSHs = new float[Count, 7];
         OcclusionProbes = new Vector4[Count];
-        LightProbes.CalculateInterpolatedLightAndOcclusionProbes(passSetting.lightMapData.lightMapUVs.m_Position.ToArray(), lightProbesSH, OcclusionProbes);
-
 
         //有点为了使用而使用这个Option了，实际上我感觉是用Graphics.DrawInstance会好一点,毕竟能直接用Renderer https://my.oschina.net/u/4589313/blog/4447463
         LODFade = new Vector4[Count];
@@ -156,6 +154,8 @@ class DrawMeshPass : ScriptableRenderPass
         {
             if (passSetting.LitInstancedMaterial != null)
             {
+                LightProbes.CalculateInterpolatedLightAndOcclusionProbes(passSetting.lightMapData.lightMapUVs.m_Position.ToArray(), lightProbesSH, OcclusionProbes);
+
                 passSetting.LitInstancedMaterial.EnableKeyword("LIGHTMAP_ON");//可以自己测试LightMap
                 //passSetting.LitInstancedMaterial.DisableKeyword("LIGHTMAP_ON");//可以自己测试LightProbe
                 //passSetting.LitInstancedMaterial.EnableKeyword("LOD_FADE_CROSSFADE");

@@ -63,7 +63,8 @@ Shader "Unlit/MRT"
                 
                 FragmentOutput m_FragmentOutput;
                 //m_FragmentOutput.GBuffer0 = float4(1, 0, 0, 1) * SAMPLE_TEXTURE2D(_CameraDepthAttachment, sampler_CameraDepthAttachment, float2(0.5, 0.5)).r;
-                m_FragmentOutput.GBuffer0 = float4(1, 0, 0, 1) * SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, float2(0.5, 0.5)).r;
+                //m_FragmentOutput.GBuffer0 = float4(1, 0, 0, 1) * SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, float2(0.5, 0.5)).r;
+                m_FragmentOutput.GBuffer0 = float4(1, 0, 0, 1);
                 m_FragmentOutput.GBuffer1 = float4(0, 1, 0, 1);
                 m_FragmentOutput.GBuffer2 = float4(0, 0, 1, 1);
                 m_FragmentOutput.GBuffer3 = float4(1, 0, 0, 1);

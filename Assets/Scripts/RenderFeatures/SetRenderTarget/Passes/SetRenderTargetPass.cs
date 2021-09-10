@@ -51,8 +51,8 @@ class SetRenderTargetPass : ScriptableRenderPass
     RenderTargetIdentifier renderTargetDepthIdentifier;//MRT Depth RenderTargetIdentifier
     RenderTargetIdentifier tempRenderTargetDepthIdentifier;//MRT MSAA temp Depth RenderTargetIdentifier
     //MRT Binding color Load/Store Action
-    RenderBufferLoadAction[] m_ColorLoadAction = new RenderBufferLoadAction[3];
-    RenderBufferStoreAction[] m_ColorStoreAction = new RenderBufferStoreAction[3];
+    RenderBufferLoadAction[] m_ColorLoadActions = new RenderBufferLoadAction[3];
+    RenderBufferStoreAction[] m_ColorStoreActions = new RenderBufferStoreAction[3];
 
     public SetRenderTargetPass(string profilerTag, RenderPassEvent renderPassEvent, RenderQueueType renderQueueType, int layerMask, int LayerMask1, string[] shaderTags,
     Material overrideMaterial, int overrideMaterialPassIndex,
@@ -136,7 +136,7 @@ class SetRenderTargetPass : ScriptableRenderPass
             tempResolveRenderTexture[0].useMipMap = true;
             tempResolveRenderTexture[0].autoGenerateMips = false;
             tempResolveRenderTexture[0].antiAliasing = 2;
-            //mipTextures[i].memorylessMode = RenderTextureMemoryless.MSAA;
+            tempResolveRenderTexture[0].memorylessMode = RenderTextureMemoryless.MSAA;
             tempResolveRenderTexture[0].bindTextureMS = true;
 
             for (int i = 1; i < tempResolveRenderTexture.Length; ++i)
@@ -146,7 +146,7 @@ class SetRenderTargetPass : ScriptableRenderPass
                 tempResolveRenderTexture[i].useMipMap = true;
                 tempResolveRenderTexture[i].autoGenerateMips = false;
                 tempResolveRenderTexture[i].antiAliasing = 2;
-                //mipTextures[i].memorylessMode = RenderTextureMemoryless.MSAA;
+                mipTextures[i].memorylessMode = RenderTextureMemoryless.MSAA;
                 tempResolveRenderTexture[i].bindTextureMS = true;
             }
         }
@@ -196,21 +196,20 @@ class SetRenderTargetPass : ScriptableRenderPass
     {
         //Request Render Texture
 
-
         //Test4
-        Test4_Setup(cmd, ref renderingData);
+        //Test4_Setup(cmd, ref renderingData);
 
         //Test5/Test6
         //Test5_6_Setup(cmd, ref renderingData);
 
         //Test7
-        //Test7_Setup(cmd, ref renderingData);
+        Test7_Setup(cmd, ref renderingData);
     }
 
     // Here you can implement the rendering logic.
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
     {
-        Test4(context, ref renderingData);
+        Test7(context, ref renderingData);
     }
 
     public void SetRenderSetting(ref RenderingData renderingData, Camera camera)
@@ -379,16 +378,16 @@ class SetRenderTargetPass : ScriptableRenderPass
 
         #region [Multiple Render Target Store/Load Action]
         //ColorLoadActions
-        m_ColorLoadAction[0] = RenderBufferLoadAction.DontCare;
-        m_ColorLoadAction[1] = RenderBufferLoadAction.Load;
-        m_ColorLoadAction[2] = RenderBufferLoadAction.DontCare;
+        m_ColorLoadActions[0] = RenderBufferLoadAction.Load;
+        m_ColorLoadActions[1] = RenderBufferLoadAction.Load;
+        m_ColorLoadActions[2] = RenderBufferLoadAction.Load;
         //ColorStoreActions
-        m_ColorStoreAction[0] = RenderBufferStoreAction.DontCare;
-        m_ColorStoreAction[1] = RenderBufferStoreAction.Store;
-        m_ColorStoreAction[2] = RenderBufferStoreAction.Store;
+        m_ColorStoreActions[0] = RenderBufferStoreAction.Store;
+        m_ColorStoreActions[1] = RenderBufferStoreAction.Store;
+        m_ColorStoreActions[2] = RenderBufferStoreAction.Store;
 
         //RenderTargetBinding
-        RenderTargetBinding m_RenderTargetBinding = new RenderTargetBinding(renderTargetIdentifiers, m_ColorLoadAction, m_ColorStoreAction,//ColorLoad/StoreAction
+        RenderTargetBinding m_RenderTargetBinding = new RenderTargetBinding(renderTargetIdentifiers, m_ColorLoadActions, m_ColorStoreActions,//ColorLoad/StoreAction
         renderTargetDepthIdentifier, RenderBufferLoadAction.Load, RenderBufferStoreAction.Store);//DepthLoad/StoreAction
         #endregion
 
@@ -445,17 +444,17 @@ class SetRenderTargetPass : ScriptableRenderPass
 
         #region [Multiple Render Target Store/Load Action]
         //ColorLoadActions
-        m_ColorLoadAction[0] = RenderBufferLoadAction.DontCare;
-        m_ColorLoadAction[1] = RenderBufferLoadAction.DontCare;
-        m_ColorLoadAction[2] = RenderBufferLoadAction.DontCare;
+        m_ColorLoadActions[0] = RenderBufferLoadAction.DontCare;
+        m_ColorLoadActions[1] = RenderBufferLoadAction.DontCare;
+        m_ColorLoadActions[2] = RenderBufferLoadAction.DontCare;
         //ColorStoreActions
-        m_ColorStoreAction[0] = RenderBufferStoreAction.Store;
-        m_ColorStoreAction[1] = RenderBufferStoreAction.Store;
-        m_ColorStoreAction[2] = RenderBufferStoreAction.Store;
+        m_ColorStoreActions[0] = RenderBufferStoreAction.Store;
+        m_ColorStoreActions[1] = RenderBufferStoreAction.Store;
+        m_ColorStoreActions[2] = RenderBufferStoreAction.Store;
 
 
         //RenderTargetBinding
-        RenderTargetBinding m_RenderTargetBinding = new RenderTargetBinding(tempRenderTargetIdentifiers, m_ColorLoadAction, m_ColorStoreAction,//ColorLoad/StoreAction
+        RenderTargetBinding m_RenderTargetBinding = new RenderTargetBinding(tempRenderTargetIdentifiers, m_ColorLoadActions, m_ColorStoreActions,//ColorLoad/StoreAction
         tempRenderTargetDepthIdentifier, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);//DepthLoad/StoreAction
 
         #endregion
