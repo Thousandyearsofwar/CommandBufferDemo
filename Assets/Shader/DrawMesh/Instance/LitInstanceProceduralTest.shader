@@ -116,7 +116,7 @@ Shader "Unlit/LitInstanceProceduralTest"
                 float3 ColorGI = SAMPLE_GI(input.lightmapUV, input.vertexSH, input.normalWS);
                 //float3 ColorGI = SampleLightmap(input.lightmapUV, input.normalWS);
                 //float3 ColorGI = SampleSHPixel(input.vertexSH, input.normalWS);
-                //unity_LODFade.xxx *
+
                 return float4(ColorGI, 1.0);
             }
 

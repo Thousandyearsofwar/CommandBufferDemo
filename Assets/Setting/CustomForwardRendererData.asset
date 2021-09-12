@@ -166,8 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b74a777e00fed47a2a0e40bc88c985, type: 3}
   m_Name: RenderObjectsFeature
   m_EditorClassIdentifier: 
-  m_Active: 1
-  Event: 250
+  m_Active: 0
+  Event: 400
   m_RenderQueueType: 0
   m_LayerMask:
     serializedVersion: 2
@@ -218,9 +218,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6005a86523bc2c4b8001b4b9454ebb2, type: 3}
-  m_Name: DrawMeshFeature
+  m_Name: DrawMeshInstance
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   GPUComputeShader: {fileID: 7200000, guid: e7e17e831f661994c9d963f1f102bda7, type: 3}
   GPUProceduralCS: {fileID: 7200000, guid: c1f345a3f7dc062488878ccd9dcc117b, type: 3}
   InstanceMaterial: {fileID: 2100000, guid: 741234a8ca420144c97bccb3e88119ee, type: 2}

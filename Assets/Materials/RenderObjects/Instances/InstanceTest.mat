@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: InstanceTest
   m_Shader: {fileID: 4800000, guid: 0e51892f8786ee548a5de10eab02c279, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: UNITY_ASSUME_UNIFORM_SCALING
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0

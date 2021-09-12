@@ -40,7 +40,7 @@ class RenderTextureRequestPass : ScriptableRenderPass
     }
     public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
     {
-        RTRequestTest0_1(cmd, ref renderingData);
+        RTRequestTest0_0(cmd, ref renderingData);
     }
 
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -62,8 +62,15 @@ class RenderTextureRequestPass : ScriptableRenderPass
     void RTRequestTest0_0(CommandBuffer commandBuffer, ref RenderingData renderingData)
     {
         RenderTextureDescriptor cameraDescriptor = renderingData.cameraData.cameraTargetDescriptor;
-        if (renderTexture == null)
+        //1.renderTexture == null必要性 只创建一张RenderTexture
+        //2.IsCreated 防止未被创建
+        //3.CoreUtils.Destroy 安全Destory RenderTexture
+        //4.编辑器上面的bug 
+        //从哪里参考:ShadowsMidtonesHighlightsEditor.cs
+        //5.renderTexture.Create();
+        if (renderTexture == null || !renderTexture.IsCreated())
         {
+            CoreUtils.Destroy(renderTexture);
             renderTexture = new RenderTexture(cameraDescriptor);
             renderTexture.name = "RequestRT";
         }
@@ -74,6 +81,13 @@ class RenderTextureRequestPass : ScriptableRenderPass
     void RTRequestTest0_1(CommandBuffer commandBuffer, ref RenderingData renderingData)
     {
         RenderTextureDescriptor cameraDescriptor = renderingData.cameraData.cameraTargetDescriptor;
+        //1.申请临时的RenderTexture 必须手动Release掉
+        //需要时刻关心生命周期！！
+        //2.释放资源的区别:RenderTexture.Release和Destroy。https://zhuanlan.zhihu.com/p/41251356 
+        //RenderTexture.Release释放显存，内存不释放
+        //Destroy会把Object销毁的同时连带显存释放掉
+        //所以出于性能考虑，频繁使用Destory会加重申请内存的负担
+        //从哪里参考:ShadowUtils.cs
         renderTexture = RenderTexture.GetTemporary(cameraDescriptor);
         renderTexture.name = "RequestRT";
         ConfigureTarget(renderTexture);
@@ -82,7 +96,14 @@ class RenderTextureRequestPass : ScriptableRenderPass
     void RTRequestTest0_2(CommandBuffer commandBuffer, ref RenderingData renderingData)
     {
         RenderTextureDescriptor cameraDescriptor = renderingData.cameraData.cameraTargetDescriptor;
+        //1.Shader.PropertyToID的作用：
+        //用字符串获取一个唯一的HashID
+        //相当于一个全局的id，需要保证其他Material着色使用这张RenderTexture时，这张RenderTexture渲染完成，没有被Release掉
+        //就不用手动setTexture了
         renderTextureID = Shader.PropertyToID("Request_ID");
+        //2.RenderTexture.GetTemporary和commandBuffer.GetTemporaryRT[申请RenderTexture的区别]
+        //1.RenderTexture.GetTemporary需要手动释放掉
+        //2.使用CommandBuffer申请的临时的RenderTexture如果都没有显式地使用(Release)TemporaryRT，在相机完成渲染后或Graphics.ExecuteCommandBuffer完成后被移除(Remove)(Destory?)
         commandBuffer.GetTemporaryRT(renderTextureID, cameraDescriptor, FilterMode.Bilinear);
 
         ConfigureTarget(renderTextureID);
@@ -120,8 +141,11 @@ class RenderTextureRequestPass : ScriptableRenderPass
     public override void OnCameraCleanup(CommandBuffer cmd)
     {
         //@@@记得释放Pass中创建RenderTexture,不然会内存泄露
-        //UnityEngine.Object.DestroyImmediate(renderTexture);//没有判空处理才用
-        RenderTexture.ReleaseTemporary(renderTexture);
+        // if (renderTexture)
+        // {
+        //     RenderTexture.ReleaseTemporary(renderTexture);
+        //     renderTexture = null;
+        // }
         cmd.ReleaseTemporaryRT(renderTextureID);
         cmd.ReleaseTemporaryRT(renderTargetHandle.id);
     }

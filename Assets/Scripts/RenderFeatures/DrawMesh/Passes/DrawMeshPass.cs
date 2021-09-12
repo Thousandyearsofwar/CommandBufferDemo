@@ -41,7 +41,6 @@ class DrawMeshPass : ScriptableRenderPass
     private static Vector4[] lightMapST = new Vector4[4];
 
     SphericalHarmonicsL2[] lightProbesSH;
-    float[,] lightProbeSHs;
     Vector4[] OcclusionProbes;
 
     Vector4[] LODFade;
@@ -54,8 +53,7 @@ class DrawMeshPass : ScriptableRenderPass
         m_ProfilingSampler = new ProfilingSampler(m_ProfilerTag);
         this.renderPassEvent = m_DrawMeshPassSetting.passEvent;
 
-        DrawLitMeshInstanced_Setup();
-
+        DrawMeshInstanced_Setup();
     }
 
     public void DrawMeshInstanced_Setup()
@@ -94,9 +92,8 @@ class DrawMeshPass : ScriptableRenderPass
             positions[i] = new Vector4(passSetting.lightMapData.lightMapUVs.m_Position[i].x, passSetting.lightMapData.lightMapUVs.m_Position[i].y, passSetting.lightMapData.lightMapUVs.m_Position[i].z, 1.0f);
         }
         lightProbesSH = new SphericalHarmonicsL2[Count];
-        lightProbeSHs = new float[Count, 7];
         OcclusionProbes = new Vector4[Count];
-
+        
         //有点为了使用而使用这个Option了，实际上我感觉是用Graphics.DrawInstance会好一点,毕竟能直接用Renderer https://my.oschina.net/u/4589313/blog/4447463
         LODFade = new Vector4[Count];
         for (int i = 0; i < Count; i++)
@@ -139,6 +136,7 @@ class DrawMeshPass : ScriptableRenderPass
                 MaterialPropertyBlock m_MatBlock = new MaterialPropertyBlock();
 
                 m_MatBlock.SetVectorArray("_TestColor", colors);
+                //一个DrawMeshInstance指令绘制的Instance数量最多1023个
                 commandBuffer.DrawMeshInstanced(passSetting.m_Mesh, 0, passSetting.UnlitInstancedMaterial, 0, matrices, 1023, m_MatBlock);
             }
         }

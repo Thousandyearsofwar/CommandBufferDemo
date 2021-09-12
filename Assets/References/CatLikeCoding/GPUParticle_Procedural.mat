@@ -22,7 +22,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: GPUParticle_Procedural
   m_Shader: {fileID: -6465566751694194690, guid: 9366aee76b742f04dbecc53bf5f5be3b, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: UNITY_INSTANCING_ENABLED
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0

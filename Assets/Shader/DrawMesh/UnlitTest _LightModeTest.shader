@@ -14,7 +14,7 @@ Shader "Unlit/UnlitTest _LightModeTest"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
         UNITY_INSTANCING_BUFFER_START(Props)
-            UNITY_DEFINE_INSTANCED_PROP(float4,_TestColor)
+        UNITY_DEFINE_INSTANCED_PROP(float4, _TestColor)
         UNITY_INSTANCING_BUFFER_END(Props)
 
 
@@ -22,10 +22,10 @@ Shader "Unlit/UnlitTest _LightModeTest"
         
 
 
-        // TEXTURE2D(_MainTex);	SAMPLER(sampler_MainTex);
+
 
         struct Attributes
-        { 
+        {
             float4 positionOS : POSITION;
             UNITY_VERTEX_INPUT_INSTANCE_ID
         };
@@ -60,7 +60,7 @@ Shader "Unlit/UnlitTest _LightModeTest"
             float4 LitPassFragment(Varyings input) : SV_TARGET
             {
                 UNITY_SETUP_INSTANCE_ID(input);
-                return UNITY_ACCESS_INSTANCED_PROP(Props,_TestColor);
+                return UNITY_ACCESS_INSTANCED_PROP(Props, _TestColor);
             }
 
             ENDHLSL

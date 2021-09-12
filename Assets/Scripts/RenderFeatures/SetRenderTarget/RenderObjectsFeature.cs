@@ -74,8 +74,8 @@ public class RenderObjectsFeature : ScriptableRendererFeature
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        renderer.EnqueuePass(m_SetRenderTargetPass);
-        //renderer.EnqueuePass(m_DrawRendererPass);
+        //renderer.EnqueuePass(m_SetRenderTargetPass);
+        renderer.EnqueuePass(m_DrawRendererPass);
     }
 }
 

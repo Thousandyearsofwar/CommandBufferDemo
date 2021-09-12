@@ -15,19 +15,19 @@ Shader "Unlit/LitInstanceTest"
 
         struct Attributes
         {
-            float4 positionOS: POSITION;
-            float3 normalOS: NORMAL;
-            float2 texcoord: TEXCOORD0;
-            float2 lightmapUV: TEXCOORD1;
+            float4 positionOS : POSITION;
+            float3 normalOS : NORMAL;
+            float2 texcoord : TEXCOORD0;
+            float2 lightmapUV : TEXCOORD1;
             UNITY_VERTEX_INPUT_INSTANCE_ID
         };
 
         struct Varyings
         {
-            float4 positionCS: SV_POSITION;
-            float2 texcoord: TEXCOORD0;
+            float4 positionCS : SV_POSITION;
+            float2 texcoord : TEXCOORD0;
             DECLARE_LIGHTMAP_OR_SH(lightmapUV, vertexSH, 1);
-            float3 normalWS: TEXCOORD2;
+            float3 normalWS : TEXCOORD2;
             UNITY_VERTEX_INPUT_INSTANCE_ID
         };
 
@@ -57,8 +57,9 @@ Shader "Unlit/LitInstanceTest"
 
             #pragma multi_compile _ DIRLIGHTMAP_COMBINED
             #pragma multi_compile _ LIGHTMAP_ON
-            #pragma multi_compile _ UNITY_INSTANCED_LIGHTMAPSTS
+            //#pragma multi_compile _ UNITY_INSTANCED_LIGHTMAPSTS
             #pragma multi_compile _ LOD_FADE_CROSSFADE
+
 
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
@@ -66,13 +67,7 @@ Shader "Unlit/LitInstanceTest"
             //#pragma instancing_options nolightmap//使用实例化时获取不了LightmapST[Scale/Offset].
             //#pragma instancing_options nolightprobe//使用实例化时获取不了Light Probe values(包括occlusion data).
             
-            //#pragma instancing_options nomatrices//没有M矩阵变换
-            //#pragma instancing_options force_same_maxcount_for_gl
-            //#pragma instancing_options maxcount:50
-            //#pragma instancing_options forcemaxcount:50
-
             //#pragma instancing_options nolodfade //默认lodfade
-            // #pragma instancing_options assumeuniformscaling
 
 
             Varyings LitPassVertex(Attributes input)
@@ -94,7 +89,7 @@ Shader "Unlit/LitInstanceTest"
                 return output;
             }
 
-            float4 LitPassFragment(Varyings input): SV_TARGET
+            float4 LitPassFragment(Varyings input) : SV_TARGET
             {
                 UNITY_SETUP_INSTANCE_ID(input);
                 float3 ColorGI = SAMPLE_GI(input.lightmapUV, input.vertexSH, input.normalWS);

@@ -96,26 +96,34 @@ class SetRenderTargetPass : ScriptableRenderPass
         this.stencilSettings = stencilSettings;
 
 
-        Request_RenderTexture();
+
     }
 
-    public void Request_RenderTexture()
+    public void Request_RenderTexture(CommandBuffer cmd, RenderingData renderingData)
     {
         //补充说明：New RenderTexture能够控制的变量很多，tempRenderTexture的方式Mip目前没有办法控制
-        mipTexture = new RenderTexture(1024, 1024, 16, UnityEngine.RenderTextureFormat.DefaultHDR, 8);
-        mipTexture.name = "RequestRT";
-        mipTexture.useMipMap = true;
-        mipTexture.autoGenerateMips = false;
-
-        if (mipTextures[0] == null)
+        if (mipTexture == null || !mipTexture.IsCreated())
         {
+            CoreUtils.Destroy(mipTexture);
+            mipTexture = new RenderTexture(1024, 1024, 16, UnityEngine.RenderTextureFormat.DefaultHDR, 8);
+            mipTexture.name = "RequestRT";
+            mipTexture.useMipMap = true;
+            mipTexture.autoGenerateMips = false;
+        }
+        if (mipTextures[0] == null || !mipTextures[0].IsCreated())
+        {
+            CoreUtils.Destroy(mipTextures[0]);
             mipTextures[0] = new RenderTexture(1024, 1024, 16, UnityEngine.RenderTextureFormat.ARGB2101010, 3);
             mipTextures[0].name = "RequestRT" + 0;
             mipTextures[0].useMipMap = true;
             mipTextures[0].autoGenerateMips = false;
             mipTextures[0].antiAliasing = 1;
-            for (int i = 1; i < mipTextures.Length; ++i)
+        }
+        for (int i = 1; i < mipTextures.Length; ++i)
+        {
+            if (mipTextures[i] == null || !mipTextures[i].IsCreated())
             {
+                CoreUtils.Destroy(mipTextures[i]);
                 mipTextures[i] = new RenderTexture(1024, 1024, 0, UnityEngine.RenderTextureFormat.ARGB2101010, 3);
                 mipTextures[i].name = "RequestRT" + i;
                 mipTextures[i].useMipMap = true;
@@ -124,38 +132,47 @@ class SetRenderTargetPass : ScriptableRenderPass
             }
         }
 
-        depthTexture = new RenderTexture(1024, 1024, 0, RenderTextureFormat.R16, 3);
+        if (depthTexture == null || !depthTexture.IsCreated())
+        {
+            CoreUtils.Destroy(depthTexture);
+            depthTexture = new RenderTexture(1024, 1024, 0, RenderTextureFormat.R16, 3);
+        }
+
 
         RenderTextureDescriptor mipTextureDescriptor0 = mipTextures[0].descriptor;
         RenderTextureDescriptor mipTextureDescriptor1 = mipTextures[1].descriptor;
 
-        if (tempResolveRenderTexture[0] == null)
+        if (tempResolveRenderTexture[0] == null || !tempResolveRenderTexture[0].IsCreated())
         {
+            CoreUtils.Destroy(tempResolveRenderTexture[0]);
             tempResolveRenderTexture[0] = new RenderTexture(mipTextureDescriptor0);
             tempResolveRenderTexture[0].name = "tempRequestRT" + 0;
             tempResolveRenderTexture[0].useMipMap = true;
             tempResolveRenderTexture[0].autoGenerateMips = false;
             tempResolveRenderTexture[0].antiAliasing = 2;
-            tempResolveRenderTexture[0].memorylessMode = RenderTextureMemoryless.MSAA;
+            tempResolveRenderTexture[0].memorylessMode = RenderTextureMemoryless.None;
             tempResolveRenderTexture[0].bindTextureMS = true;
-
-            for (int i = 1; i < tempResolveRenderTexture.Length; ++i)
+        }
+        for (int i = 1; i < tempResolveRenderTexture.Length; ++i)
+        {
+            if (tempResolveRenderTexture[i] == null || !tempResolveRenderTexture[i].IsCreated())
             {
+                CoreUtils.Destroy(tempResolveRenderTexture[i]);
                 tempResolveRenderTexture[i] = new RenderTexture(mipTextureDescriptor1);
                 tempResolveRenderTexture[i].name = "tempRequestRT" + i;
                 tempResolveRenderTexture[i].useMipMap = true;
                 tempResolveRenderTexture[i].autoGenerateMips = false;
                 tempResolveRenderTexture[i].antiAliasing = 2;
-                mipTextures[i].memorylessMode = RenderTextureMemoryless.MSAA;
+                mipTextures[i].memorylessMode = RenderTextureMemoryless.None;
                 tempResolveRenderTexture[i].bindTextureMS = true;
             }
         }
+        cmd.GetTemporaryRT(renderTextureID, renderingData.cameraData.cameraTargetDescriptor.width, renderingData.cameraData.cameraTargetDescriptor.height, 8,
+        FilterMode.Bilinear, UnityEngine.Experimental.Rendering.GraphicsFormat.A2B10G10R10_UNormPack32, 1, false, RenderTextureMemoryless.Depth, false);
     }
 
     void Test4_Setup(CommandBuffer cmd, ref RenderingData renderingData)
     {
-        cmd.GetTemporaryRT(renderTextureID, renderingData.cameraData.cameraTargetDescriptor.width, renderingData.cameraData.cameraTargetDescriptor.height, 8,
-        FilterMode.Bilinear, UnityEngine.Experimental.Rendering.GraphicsFormat.A2B10G10R10_UNormPack32, 1, false, RenderTextureMemoryless.Depth, false);
         ConfigureTarget(renderTextureID, renderTextureID);
         ConfigureInput(ScriptableRenderPassInput.Depth);
         //看情况调用DepthOnly Pass,Opaque之后调用Pass直接Copy，如果在这之前调用DepthOnly pass
@@ -195,21 +212,21 @@ class SetRenderTargetPass : ScriptableRenderPass
     public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
     {
         //Request Render Texture
-
+        Request_RenderTexture(cmd, renderingData);
         //Test4
-        //Test4_Setup(cmd, ref renderingData);
+        Test4_Setup(cmd, ref renderingData);
 
         //Test5/Test6
         //Test5_6_Setup(cmd, ref renderingData);
 
         //Test7
-        Test7_Setup(cmd, ref renderingData);
+        //Test7_Setup(cmd, ref renderingData);
     }
 
     // Here you can implement the rendering logic.
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
     {
-        Test7(context, ref renderingData);
+        Test4(context, ref renderingData);
     }
 
     public void SetRenderSetting(ref RenderingData renderingData, Camera camera)
@@ -378,9 +395,9 @@ class SetRenderTargetPass : ScriptableRenderPass
 
         #region [Multiple Render Target Store/Load Action]
         //ColorLoadActions
-        m_ColorLoadActions[0] = RenderBufferLoadAction.Load;
-        m_ColorLoadActions[1] = RenderBufferLoadAction.Load;
-        m_ColorLoadActions[2] = RenderBufferLoadAction.Load;
+        m_ColorLoadActions[0] = RenderBufferLoadAction.DontCare;
+        m_ColorLoadActions[1] = RenderBufferLoadAction.DontCare;
+        m_ColorLoadActions[2] = RenderBufferLoadAction.DontCare;
         //ColorStoreActions
         m_ColorStoreActions[0] = RenderBufferStoreAction.Store;
         m_ColorStoreActions[1] = RenderBufferStoreAction.Store;
@@ -388,7 +405,7 @@ class SetRenderTargetPass : ScriptableRenderPass
 
         //RenderTargetBinding
         RenderTargetBinding m_RenderTargetBinding = new RenderTargetBinding(renderTargetIdentifiers, m_ColorLoadActions, m_ColorStoreActions,//ColorLoad/StoreAction
-        renderTargetDepthIdentifier, RenderBufferLoadAction.Load, RenderBufferStoreAction.Store);//DepthLoad/StoreAction
+        renderTargetDepthIdentifier, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);//DepthLoad/StoreAction
         #endregion
 
         CommandBuffer commandBuffer = CommandBufferPool.Get();

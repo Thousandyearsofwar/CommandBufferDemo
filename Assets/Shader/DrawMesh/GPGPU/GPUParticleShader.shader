@@ -36,6 +36,7 @@ Shader "Unlit/GPUParticleShader"
             #pragma vertex LitPassVertex
             #pragma fragment LitPassFragment
             #pragma multi_compile_instancing
+
             //#pragma instancing_options procedural:ConfigureProcedural
             
             void ConfigureProcedural(Attributes input)

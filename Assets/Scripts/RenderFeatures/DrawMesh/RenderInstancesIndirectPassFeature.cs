@@ -24,7 +24,7 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
 
     public override void Create()
     {
-        SetUpProceduralPass();
+        SetUpIndirectPass();
     }
 
     void SetUpIndirectPass()
@@ -71,10 +71,7 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
         }
 
         m_IndirectPass = new RenderInstancesIndirectPass(GPUComputeShader, InstanceMaterial, InstanceMesh, positionBuffer, bufferWithArgs, resolution);
-        m_ProceduralPass = new RenderInstancesProceduralPass(GPUProceduralCS, ProceduralMaterial, InstanceMesh, particleBuffer, bufferWithArgs, resolution);
-
         m_IndirectPass.renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
-        m_ProceduralPass.renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
     }
 
     void SetUpProceduralPass()
@@ -115,10 +112,10 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        // if (GPUComputeShader != null && InstanceMaterial != null && InstanceMesh != null && positionBuffer != null)
-        //     renderer.EnqueuePass(m_IndirectPass);
-        if (GPUProceduralCS != null && ProceduralMaterial != null && InstanceMesh != null && particleBuffer != null)
-            renderer.EnqueuePass(m_ProceduralPass);
+        if (GPUComputeShader != null && InstanceMaterial != null && InstanceMesh != null && positionBuffer != null)
+            renderer.EnqueuePass(m_IndirectPass);
+        // if (GPUProceduralCS != null && ProceduralMaterial != null && InstanceMesh != null && particleBuffer != null)
+        //     renderer.EnqueuePass(m_ProceduralPass);
     }
 
     
