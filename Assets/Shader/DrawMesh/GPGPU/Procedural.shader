@@ -1,4 +1,4 @@
-Shader "Unlit/GPUParticleProceduralShader"
+Shader "Unlit/Procedural"
 {
     Properties { }
     SubShader
@@ -23,7 +23,7 @@ Shader "Unlit/GPUParticleProceduralShader"
         {
             uint vid : SV_VertexID;
             float4 positionOS : POSITION;
-            uint instanceID : SV_InstanceID;
+            UNITY_VERTEX_INPUT_INSTANCE_ID
         };
 
         struct Varyings
@@ -32,7 +32,7 @@ Shader "Unlit/GPUParticleProceduralShader"
             float3 positionWS : TEXCOORD0;
             float2 texcoord : TEXCOORD1;
             float3 viewWS : TEXCOORD2;
-            uint instanceID : SV_InstanceID;
+            UNITY_VERTEX_INPUT_INSTANCE_ID
         };
         ENDHLSL
 
@@ -50,13 +50,16 @@ Shader "Unlit/GPUParticleProceduralShader"
 
             Varyings LitPassVertex(Attributes input)
             {
-                Varyings output=(Varyings)0;
+                Varyings output;
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_TRANSFER_INSTANCE_ID(input, output);
 
                 float3 v1 = _Positions[input.vid].position.xyz;
                 unity_ObjectToWorld = 0.0;
-                unity_ObjectToWorld._m03_m13_m23_m33 = float4(v1 + 2 * float3(input.instanceID.x, input.instanceID.x, 0), 1.0);
-                unity_ObjectToWorld._m00_m11_m22 = 1.0;
-
+                #if defined(INSTANCING_ON)
+                    unity_ObjectToWorld._m03_m13_m23_m33 = float4(v1 + 2 * float3(input.instanceID.x, input.instanceID.x, 0), 1.0);
+                    unity_ObjectToWorld._m00_m11_m22 = 1.0;
+                #endif
                 output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
                 output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
                 output.viewWS = GetWorldSpaceViewDir(output.positionWS);

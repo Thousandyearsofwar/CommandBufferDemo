@@ -223,10 +223,11 @@ MonoBehaviour:
   m_Active: 1
   GPUComputeShader: {fileID: 7200000, guid: e7e17e831f661994c9d963f1f102bda7, type: 3}
   GPUProceduralCS: {fileID: 7200000, guid: c1f345a3f7dc062488878ccd9dcc117b, type: 3}
-  InstanceMaterial: {fileID: 2100000, guid: 741234a8ca420144c97bccb3e88119ee, type: 2}
-  ProceduralMaterial: {fileID: 2100000, guid: 4ccc3e8be37598742a4e54d4c5e16349, type: 2}
+  InstanceMaterial: {fileID: 2100000, guid: 8c8dbaf9657d12647a65037c91f8893a, type: 2}
+  ProceduralMaterial: {fileID: 2100000, guid: b6fbfbdac3af88843a5576146c48bdfe, type: 2}
   InstanceMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   resolution: 16
+  isInstancesIndirect: 0
 --- !u!114 &-608302845750733304
 MonoBehaviour:
   m_ObjectHideFlags: 0

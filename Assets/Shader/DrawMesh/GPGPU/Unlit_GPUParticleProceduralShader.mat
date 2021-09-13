@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GPUParticleProceduralShader
+  m_Name: Unlit_GPUParticleProceduralShader
   m_Shader: {fileID: 4800000, guid: 25eddcd20ed53e44493451f18b8378d3, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4

@@ -66,7 +66,7 @@ class RenderInstancesIndirectPass : ScriptableRenderPass
             m_MatBlock.SetBuffer(positionId, positionBuffer);
             m_MatBlock.SetFloat(stepId, step);
 
-            var bounds = new Bounds(Vector3.zero, Vector3.one * (2f + 2f / resolution));
+            var bounds = new Bounds(Vector3.zero, Vector3.one * (2f + 2f / resolution)); 
             commandBuffer.DrawMeshInstancedIndirect(instanceMesh, 0, instanceMaterial, 0, bufferWithArgs, 0, m_MatBlock);
         }
 

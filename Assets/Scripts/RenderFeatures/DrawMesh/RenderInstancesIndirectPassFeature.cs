@@ -22,9 +22,13 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
 
     private static ComputeBuffer bufferWithArgs;
 
+    public bool isInstancesIndirect;
     public override void Create()
     {
-        SetUpIndirectPass();
+        // if (isInstancesIndirect)
+        //     SetUpIndirectPass();
+        // else
+        SetUpProceduralPass();
     }
 
     void SetUpIndirectPass()
@@ -39,18 +43,6 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
             positionBuffer.Release();
             positionBuffer = null;
         }
-
-        if (isActive && particleBuffer == null)
-        {
-            particleBuffer = new ComputeBuffer(MaxResolution * MaxResolution, 4 * 4 * 2);
-        }
-        if (!isActive && particleBuffer != null)
-        {
-            //释放particleBuffer
-            particleBuffer.Release();
-            particleBuffer = null;
-        }
-
 
         if (isActive)
         {
@@ -83,7 +75,7 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
         if (!isActive && particleBuffer != null)
         {
             //释放particleBuffer
-            particleBuffer.Release(); 
+            particleBuffer.Release();
             particleBuffer = null;
         }
 
@@ -112,20 +104,24 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        if (GPUComputeShader != null && InstanceMaterial != null && InstanceMesh != null && positionBuffer != null)
-            renderer.EnqueuePass(m_IndirectPass);
-        // if (GPUProceduralCS != null && ProceduralMaterial != null && InstanceMesh != null && particleBuffer != null)
-        //     renderer.EnqueuePass(m_ProceduralPass);
+        // if (isInstancesIndirect)
+        // {
+        //     if (GPUComputeShader != null && InstanceMaterial != null && InstanceMesh != null && positionBuffer != null)
+        //         renderer.EnqueuePass(m_IndirectPass);
+        // }
+        // else
+        if (GPUProceduralCS != null && ProceduralMaterial != null && InstanceMesh != null && particleBuffer != null)
+            renderer.EnqueuePass(m_ProceduralPass);
     }
 
-    
+
 
     public new void Dispose()
     {
         Dispose(true);
         positionBuffer.Release();
         particleBuffer.Release();
-        bufferWithArgs.Release(); 
+        bufferWithArgs.Release();
         GC.SuppressFinalize(this);
     }
 }
