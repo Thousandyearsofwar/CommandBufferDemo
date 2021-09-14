@@ -12,118 +12,79 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
     public Material ProceduralMaterial;
     public Mesh InstanceMesh;
 
-    const int MaxResolution = 300;
-    [Range(10, MaxResolution)]
-    public uint resolution = 10;
+    const int MaxResolution = 288;
+    [Range(16, MaxResolution)]
+    public uint resolution = 16;
     RenderInstancesIndirectPass m_IndirectPass;
     RenderInstancesProceduralPass m_ProceduralPass;
     private static ComputeBuffer positionBuffer;
     private static ComputeBuffer particleBuffer;
 
-    private static ComputeBuffer bufferWithArgs;
-
+    private static ComputeBuffer bufferWithArgs_Indirect;
+    private static ComputeBuffer bufferWithArgs_Procedural;
     public bool isInstancesIndirect;
     public override void Create()
     {
-        // if (isInstancesIndirect)
-        //     SetUpIndirectPass();
-        // else
+        resolution = (uint)(resolution / 16) * 16;
+        SetUpIndirectPass();
         SetUpProceduralPass();
     }
 
     void SetUpIndirectPass()
     {
-        if (isActive && positionBuffer == null)
-        {
-            positionBuffer = new ComputeBuffer(MaxResolution * MaxResolution, 3 * 4);
-        }
-        if (!isActive && positionBuffer != null)
-        {
-            //释放positionBuffer
-            positionBuffer.Release();
-            positionBuffer = null;
-        }
-
         if (isActive)
         {
-            if (bufferWithArgs == null)
-                bufferWithArgs = new ComputeBuffer(5, 4, ComputeBufferType.IndirectArguments);
+            if (positionBuffer == null)
+                positionBuffer = new ComputeBuffer(MaxResolution * MaxResolution, 3 * 4);
+            if (bufferWithArgs_Indirect == null)
+                bufferWithArgs_Indirect = new ComputeBuffer(5, 4, ComputeBufferType.IndirectArguments);
             else
             if (InstanceMesh != null)
-                bufferWithArgs.SetData(new uint[] { InstanceMesh.GetIndexCount(0), resolution * resolution, 0, 0, 0 });
-        }
-        else
-        {
-            if (bufferWithArgs != null)
-            {
-                //释放bufferWithArgsBuffer
-                bufferWithArgs.Release();
-                bufferWithArgs = null;
-            }
+                bufferWithArgs_Indirect.SetData(new uint[] { InstanceMesh.GetIndexCount(0), resolution * resolution, 0, 0, 0 });
         }
 
-        m_IndirectPass = new RenderInstancesIndirectPass(GPUComputeShader, InstanceMaterial, InstanceMesh, positionBuffer, bufferWithArgs, resolution);
+        m_IndirectPass = new RenderInstancesIndirectPass(GPUComputeShader, InstanceMaterial, InstanceMesh, positionBuffer, bufferWithArgs_Indirect, resolution);
         m_IndirectPass.renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
     }
 
     void SetUpProceduralPass()
     {
-        if (isActive && particleBuffer == null)
-        {
-            particleBuffer = new ComputeBuffer(MaxResolution * MaxResolution, 4 * 4 * 2);
-        }
-        if (!isActive && particleBuffer != null)
-        {
-            //释放particleBuffer
-            particleBuffer.Release();
-            particleBuffer = null;
-        }
 
         if (isActive)
         {
-            if (bufferWithArgs == null)
-                bufferWithArgs = new ComputeBuffer(5, 4, ComputeBufferType.IndirectArguments);
+            if (particleBuffer == null)
+                particleBuffer = new ComputeBuffer(MaxResolution * MaxResolution, 4 * 4 * 2);
+            if (bufferWithArgs_Procedural == null)
+                bufferWithArgs_Procedural = new ComputeBuffer(5, 4, ComputeBufferType.IndirectArguments);
             else
             if (InstanceMesh != null)
-                bufferWithArgs.SetData(new uint[] { resolution * resolution, 5, 0, 0, 0 });
-        }
-        else
-        {
-            if (bufferWithArgs != null)
-            {
-                //释放bufferWithArgsBuffer
-                bufferWithArgs.Release();
-                bufferWithArgs = null;
-            }
+                bufferWithArgs_Procedural.SetData(new uint[] { resolution * resolution, 5, 0, 0, 0 });
         }
 
-        m_ProceduralPass = new RenderInstancesProceduralPass(GPUProceduralCS, ProceduralMaterial, InstanceMesh, particleBuffer, bufferWithArgs, resolution);
-
+        m_ProceduralPass = new RenderInstancesProceduralPass(GPUProceduralCS, ProceduralMaterial, InstanceMesh, particleBuffer, bufferWithArgs_Procedural, resolution);
         m_ProceduralPass.renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        // if (isInstancesIndirect)
-        // {
-        //     if (GPUComputeShader != null && InstanceMaterial != null && InstanceMesh != null && positionBuffer != null)
-        //         renderer.EnqueuePass(m_IndirectPass);
-        // }
-        // else
+        if (isInstancesIndirect)
+        {
+            if (GPUComputeShader != null && InstanceMaterial != null && InstanceMesh != null && positionBuffer != null)
+                renderer.EnqueuePass(m_IndirectPass);
+        }
+        else
         if (GPUProceduralCS != null && ProceduralMaterial != null && InstanceMesh != null && particleBuffer != null)
             renderer.EnqueuePass(m_ProceduralPass);
     }
 
-
-
-    public new void Dispose()
+    private void OnDisable()
     {
-        Dispose(true);
         positionBuffer.Release();
         particleBuffer.Release();
-        bufferWithArgs.Release();
-        GC.SuppressFinalize(this);
+        bufferWithArgs_Indirect.Release();
+        bufferWithArgs_Procedural.Release();
     }
+
 }
 
 
