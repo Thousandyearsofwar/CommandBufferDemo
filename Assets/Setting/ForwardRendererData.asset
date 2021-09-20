@@ -26,7 +26,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6005a86523bc2c4b8001b4b9454ebb2, type: 3}
   m_Name: RenderInstancesIndirectPassFeature
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   GPUComputeShader: {fileID: 7200000, guid: e7e17e831f661994c9d963f1f102bda7, type: 3}
   GPUProceduralCS: {fileID: 7200000, guid: c1f345a3f7dc062488878ccd9dcc117b, type: 3}
   InstanceMaterial: {fileID: 2100000, guid: 8c8dbaf9657d12647a65037c91f8893a, type: 2}

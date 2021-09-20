@@ -10,10 +10,22 @@ Shader "Unlit/GPUParticleProceduralShader"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
+        CBUFFER_START(UnityBillboardPerCamera)
+        float3 unity_BillboardNormal;
+        float3 unity_BillboardTangent;
+        float4 unity_BillboardCameraParams;
+        #define unity_BillboardCameraPosition (unity_BillboardCameraParams.xyz)
+        #define unity_BillboardCameraXZAngle (unity_BillboardCameraParams.w)
+        CBUFFER_END
+
+        CBUFFER_START(UnityBillboardPerBatch)
+        float4 unity_BillboardInfo; // x: num of billboard slices; y: 1.0f / (delta angle between slices)
+        float4 unity_BillboardSize; // x: width; y: height; z: bottom
+        float4 unity_BillboardImageTexCoords[16];
+        CBUFFER_END
         struct ParticleData
         {
             float4 position;
-            float4 uv;
         };
 
         StructuredBuffer<ParticleData> _Positions;
@@ -50,42 +62,40 @@ Shader "Unlit/GPUParticleProceduralShader"
 
             Varyings LitPassVertex(Attributes input)
             {
-                Varyings output=(Varyings)0;
+                Varyings output = (Varyings)0;
+                float2 texcoord;
+                texcoord.x = float(((input.vid + 1) & 2) >> 1);
+                texcoord.y = float((input.vid & 2) >> 1);
 
-                float3 v1 = _Positions[input.vid].position.xyz;
+                float3 objectSpace = float3(texcoord.xy - 0.5, 0.0);
+
+                float3 worldSpace = _Positions[input.vid / 4].position.xyz;
+                
                 unity_ObjectToWorld = 0.0;
-                unity_ObjectToWorld._m03_m13_m23_m33 = float4(v1 + 2 * float3(input.instanceID.x, input.instanceID.x, 0), 1.0);
+                //
+                unity_ObjectToWorld._m03_m13_m23_m33 = float4(worldSpace, 1.0);
+                unity_ObjectToWorld._m03_m13_m23_m33 = float4(worldSpace + float3(input.instanceID.x, input.instanceID.x, 0.0), 1.0);
                 unity_ObjectToWorld._m00_m11_m22 = 1.0;
 
-                output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
-                output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
+                float4 pivotWS = mul(UNITY_MATRIX_M, float4(0, 0, 0, 1));
+                float4 pivotVS = mul(UNITY_MATRIX_V, pivotWS);
+                float4 positionVS = pivotVS + float4(objectSpace.xy, 0, 1);
+
+                output.positionCS = TransformWViewToHClip(positionVS.xyz);
+
+                //output.positionCS = TransformObjectToHClip(objectSpace.xyz);
+
+                output.positionWS = (objectSpace.xyz);
                 output.viewWS = GetWorldSpaceViewDir(output.positionWS);
-                output.texcoord = _Positions[input.vid].uv.xy;
+
+                output.texcoord = texcoord;
                 return output;
             }
 
             float4 LitPassFragment(Varyings input) : SV_TARGET
             {
                 UNITY_SETUP_INSTANCE_ID(input);
-
-                SurfaceData surfaceData = (SurfaceData)0;
-                surfaceData. albedo = float3(1.0f, 1.0f, 1.0f);
-                surfaceData. specular = half3(0.0h, 0.0h, 0.0h);
-                surfaceData. metallic = 0.5f;
-                surfaceData. smoothness = 0.5f;
-                surfaceData. normalTS = float3(0.0f, 1.0f, 0.0f);
-                surfaceData .alpha = 1.0f;
-
-
-                InputData inputData = (InputData)0;
-                inputData.positionWS = input.positionWS;
-                inputData.normalWS = half3(0.0h, 0.0h, 1.0h);
-
-                inputData.viewDirectionWS = input.viewWS;
-                
-                float4 color = UniversalFragmentPBR(inputData, surfaceData);
-
-                return float4(input.texcoord.xy, 0.0f, 1.0f);
+                return float4(input.texcoord.xy, 0.0, 1.0f);
             }
 
             ENDHLSL

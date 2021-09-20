@@ -25,6 +25,11 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
     public bool isInstancesIndirect;
     public override void Create()
     {
+        // positionBuffer.Release();
+        // particleBuffer.Release();
+        // bufferWithArgs_Indirect.Release();
+        // bufferWithArgs_Procedural.Release();
+
         resolution = (uint)(resolution / 16) * 16;
         SetUpIndirectPass();
         SetUpProceduralPass();
@@ -53,12 +58,12 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
         if (isActive)
         {
             if (particleBuffer == null)
-                particleBuffer = new ComputeBuffer(MaxResolution * MaxResolution, 4 * 4 * 2);
+                particleBuffer = new ComputeBuffer(MaxResolution * MaxResolution, 4 * 4);
             if (bufferWithArgs_Procedural == null)
                 bufferWithArgs_Procedural = new ComputeBuffer(5, 4, ComputeBufferType.IndirectArguments);
             else
             if (InstanceMesh != null)
-                bufferWithArgs_Procedural.SetData(new uint[] { resolution * resolution, 5, 0, 0, 0 });
+                bufferWithArgs_Procedural.SetData(new uint[] { resolution * resolution * 4, 5, 0, 0, 0 });
         }
 
         m_ProceduralPass = new RenderInstancesProceduralPass(GPUProceduralCS, ProceduralMaterial, InstanceMesh, particleBuffer, bufferWithArgs_Procedural, resolution);
@@ -77,13 +82,13 @@ public class RenderInstancesIndirectPassFeature : ScriptableRendererFeature
             renderer.EnqueuePass(m_ProceduralPass);
     }
 
-    private void OnDisable()
-    {
-        positionBuffer.Release();
-        particleBuffer.Release();
-        bufferWithArgs_Indirect.Release();
-        bufferWithArgs_Procedural.Release();
-    }
+    // private void OnDisable()
+    // {
+    //     positionBuffer.Release();
+    //     particleBuffer.Release();
+    //     bufferWithArgs_Indirect.Release();
+    //     bufferWithArgs_Procedural.Release();
+    // }
 
 }
 

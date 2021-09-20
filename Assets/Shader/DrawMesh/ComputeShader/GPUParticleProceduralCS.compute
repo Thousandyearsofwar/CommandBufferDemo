@@ -5,7 +5,6 @@
 struct ParticleData
 {
     float4 position;
-    float4 uv;
 };
 
 RWStructuredBuffer<ParticleData> _Positions;
@@ -18,8 +17,8 @@ float2 GetUV(uint3 id)
 {
     float2 uv;
     //_Step:2f/_Resolution
-    uv.x = (id.x) * _Step - 1.0;
-    uv.y = (id.y) * _Step - 1.0;
+    uv.x = (id.x) * _Step * 10 ;
+    uv.y = (id.y) * _Step * 10;
     //这里的作用是将id[0-DispatchIndex]映射到(-1,1)
     //所以映射到(-1,1)之后每个点的距离为2/_Resolution即_Step的大小
     return uv;
@@ -28,50 +27,19 @@ float2 GetUV(uint3 id)
 [numthreads(8, 8, 1)]
 void FunctionKernel(uint3 id : SV_DispatchThreadID)
 {
-    ParticleData m_ParticleData;
+    ParticleData m_ParticleData = (ParticleData)0;
     
     //_Resolution=8*ThreadGroups[Dispatch了多少个线程组]=groupSizeX
     uint DispatchIndex = id.x + (id.y * _Resolution);
     float2 uv = GetUV(id);
 
-    //四边形的顶点Index，四个为一组
-    uint QuadIndex = DispatchIndex % 4;
-    //LookUp array
-    float QuadYPosition[4] = {
-        0, 1, 1, 0
-    };
-    float QuadXPosition[4] = {
-        0, -1, 1, 0
-    };
-    //  1----2
-    //  | \  |
-    //  |  \ |
-    //  0----3可以输出uv观察
-    float2 QuadUV[4] = {
-        float2(0, 0), float2(1, 0), float2(1, 1), float2(0, 1)
-    };
-
-    //simple version
-    float3 basicPosition = float3(uv.x, 0.1 * sin(id.x / 4 + _Time), uv.y);
-    //_Step:2f/_Resolution
-    float3 OffsetY = QuadYPosition[QuadIndex] * float3(0, 3 * _Step, 0);//Y方向的偏移
-    float3 OffsetX = QuadXPosition[QuadIndex] * float3(_Step, 0, 0);//X方向的偏移
-
-    m_ParticleData.position = float4(basicPosition + OffsetY + OffsetX, 1.0);
+    // simple version
+    // float3 basicPosition = float3(DispatchIndex, 0, 0);
+    // m_ParticleData.position = float4(basicPosition, 1.0);
 
     // complex version
-    // float3 basicPosition = float3(uv.x, id.x *0.1 + 0.1 * sin(id.x / 4 + _Time), uv.y);
-    // //_Step:2f/_Resolution
-    // float3 OffsetY = QuadYPosition[QuadIndex] * float3(0, 3 * _Step, 0);//Y方向的偏移
-    // float3 OffsetX = QuadXPosition[QuadIndex] * float3(_Step, 0, 0);//X方向的偏移
+    float3 basicPosition = float3(id.x * 1.5, id.x * 0.1 + sin(id.x + _Time), id.y * 1.5);
+    m_ParticleData.position = float4(basicPosition, 1.0);
 
-    // m_ParticleData.position = float4(basicPosition + OffsetY + OffsetX, 1.0);
-
-    // more complex version我自己都看不懂了(
-    // m_ParticleData.position = float4(float3(uv.x,sin(id.y/2+_Time)+sin(id.x/4+_Time), uv.y) +
-    // QuadYPosition[QuadIndex] * float3(0, 0.4 * _Step * 8, 0) +
-    // QuadXPosition[QuadIndex] * float3(0.1 * _Step * 8, 0, 0)
-    // , 1.0);
-    m_ParticleData.uv = float4(QuadUV[QuadIndex], 0, 1.0);
     _Positions[DispatchIndex] = m_ParticleData;
 }

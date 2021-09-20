@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae6baf1f1146c6740ba10dc98d0d3bdd, type: 3}
-  m_Name: 
+  m_Name: UnityEngine.Experimental.Rendering.Universal.AdditionalPostProcessData
   m_EditorClassIdentifier: 
   shaders:
     ChromaticShader: {fileID: 4800000, guid: 342563228cf753c49b8eac05ace4828a, type: 3}
